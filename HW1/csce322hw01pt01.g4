@@ -79,8 +79,8 @@ VALUESEPARATOR    : '^' ;
 ASSIGNVALUE       : '=>' ;
 WS                : [ \r\n ]+ -> skip ;
 
-error             :
-                    {
+ERROR             :
+                    . {
                       System.out.println("ERR: " + getText() + " in line " + getLine());
                       System.exit(0);
                     }
