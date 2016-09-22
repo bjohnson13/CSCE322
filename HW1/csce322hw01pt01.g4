@@ -1,36 +1,35 @@
-grammar csce322hw001pt01;
+grammar csce322hw01pt01;
 
-greaterThanSudoku :     { System.out.println( "\nStart File "); }
-                    section section section
-                        { System.out.println( "\nCease File\n"); }
+greaterThanSudoku : section section section
+                        { System.out.println( "Cease File"); }
                     EOF;
 
 section           : SECTIONBEGIN
-                        { System.out.println( "\nStart Section: " + $SECTIONBEGIN.text ); }
+                        { System.out.println( "Start Section: " + $SECTIONBEGIN.text ); }
                     title
                     SECTIONEND
                         { System.out.println( "Cease Section: " + $SECTIONEND.text ); }
                   ;
 
 title             : TITLESYMBOL '<' SECTIONNAME '>'
-                        { System.out.println( "\tLabel: " + $TITLESYMBOL.text + '<' + $SECTIONNAME.text + '>' ); }
+                        { System.out.println( "Label: " + $TITLESYMBOL.text + '<' + $SECTIONNAME.text + '>' ); }
                     ASSIGNVALUE
-                        { System.out.println( "\tAssign: " + $ASSIGNVALUE.text ); }
+                        { System.out.println( "Assign: " + $ASSIGNVALUE.text ); }
                     (list | game+)
                   ;
 
 list              : LISTBEGIN
-                        { System.out.println( "\t\tStart List: " + $LISTBEGIN.text ); }
+                        { System.out.println( "Start List: " + $LISTBEGIN.text ); }
                     listValue+
                     LISTEND
-                        { System.out.println( "\t\tCease List: " + $LISTEND.text ); }
+                        { System.out.println( "Cease List: " + $LISTEND.text ); }
                   ;
 
 game              : GAMEBEGIN
-                        { System.out.println( "\t\tStart Game: " + $GAMEBEGIN.text ); }
+                        { System.out.println( "Start Game: " + $GAMEBEGIN.text ); }
                     gameBoard
                     GAMEEND
-                        { System.out.println( "\t\tCease Game: " + $GAMEEND.text ); }
+                        { System.out.println( "Cease Game: " + $GAMEEND.text ); }
                   ;
 
 listValue         : listSymbol+
@@ -45,18 +44,18 @@ gameRow           : gameSymbol+
                         {
                           if ($ENDROW.text != null)
                           {
-                            System.out.println( "\t\t\tCease Row        : " + $ENDROW.text );
+                            System.out.println( "Cease Row: " + $ENDROW.text );
                           }
                         }
                   ;
 
 listSymbol        : NUMBER
-                        { System.out.println( "\t\t\tNumerical Symbol : " + $NUMBER.text ); }
+                        { System.out.println( "Numerical Symbol: " + $NUMBER.text ); }
                   ;
 gameSymbol        : (NUMBER
-                        { System.out.println( "\t\t\tNumerical Symbol : " + $NUMBER.text ); }
+                        { System.out.println( "Numerical Symbol: " + $NUMBER.text ); }
                     | DASH
-                        { System.out.println( "\t\t\tOpen Space       : " + $DASH.text ); }
+                        { System.out.println( "Open Space: " + $DASH.text ); }
                     )
                   ;
 
@@ -73,4 +72,4 @@ DASH              : '-' ;
 ENDROW            : '/n' ;
 VALUESEPARATOR    : '^' ;
 ASSIGNVALUE       : '=>' ;
-WS                : [ \t\r\n ]+ -> skip ;
+WS                : [ \r\n ]+ -> skip ;
