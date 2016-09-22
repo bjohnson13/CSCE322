@@ -16,9 +16,9 @@ public class csce322hw001pt01Parser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, SECTIONBEGIN=4, SECTIONEND=5, GAMEBEGIN=6, GAMEEND=7, 
-		TITLESYMBOL=8, LISTBEGIN=9, LISTEND=10, SECTIONNAME=11, NUMBER=12, DASH=13, 
-		ENDROW=14, ASSIGNVALUE=15, WS=16;
+		T__0=1, T__1=2, SECTIONBEGIN=3, SECTIONEND=4, GAMEBEGIN=5, GAMEEND=6, 
+		TITLESYMBOL=7, LISTBEGIN=8, LISTEND=9, SECTIONNAME=10, NUMBER=11, DASH=12, 
+		ENDROW=13, VALUESEPARATOR=14, ASSIGNVALUE=15, WS=16;
 	public static final int
 		RULE_greaterThanSudoku = 0, RULE_section = 1, RULE_title = 2, RULE_list = 3, 
 		RULE_game = 4, RULE_listValue = 5, RULE_gameBoard = 6, RULE_gameRow = 7, 
@@ -29,13 +29,13 @@ public class csce322hw001pt01Parser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'<'", "'>'", "'^'", "'%section%'", "'$section'", "'%game%'", "'$game'", 
-		"'%title%'", null, null, null, null, "'-'", "'/n'", "'=>'"
+		null, "'<'", "'>'", "'%section%'", "'$section'", "'%game%'", "'$game'", 
+		"'%title%'", null, null, null, null, "'-'", "'/n'", "'^'", "'=>'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, "SECTIONBEGIN", "SECTIONEND", "GAMEBEGIN", "GAMEEND", 
+		null, null, null, "SECTIONBEGIN", "SECTIONEND", "GAMEBEGIN", "GAMEEND", 
 		"TITLESYMBOL", "LISTBEGIN", "LISTEND", "SECTIONNAME", "NUMBER", "DASH", 
-		"ENDROW", "ASSIGNVALUE", "WS"
+		"ENDROW", "VALUESEPARATOR", "ASSIGNVALUE", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -398,6 +398,7 @@ public class csce322hw001pt01Parser extends Parser {
 		public ListSymbolContext listSymbol(int i) {
 			return getRuleContext(ListSymbolContext.class,i);
 		}
+		public TerminalNode VALUESEPARATOR() { return getToken(csce322hw001pt01Parser.VALUESEPARATOR, 0); }
 		public ListValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -442,10 +443,10 @@ public class csce322hw001pt01Parser extends Parser {
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			setState(70);
 			_la = _input.LA(1);
-			if (_la==T__2) {
+			if (_la==VALUESEPARATOR) {
 				{
 				setState(69);
-				match(T__2);
+				match(VALUESEPARATOR);
 				}
 			}
 
@@ -577,7 +578,12 @@ public class csce322hw001pt01Parser extends Parser {
 				}
 			}
 
-			 System.out.println( "\t\t\tCease Row        : " + (((GameRowContext)_localctx).ENDROW!=null?((GameRowContext)_localctx).ENDROW.getText():null) ); 
+
+			                          if ((((GameRowContext)_localctx).ENDROW!=null?((GameRowContext)_localctx).ENDROW.getText():null) != null)
+			                          {
+			                            System.out.println( "\t\t\tCease Row        : " + (((GameRowContext)_localctx).ENDROW!=null?((GameRowContext)_localctx).ENDROW.getText():null) );
+			                          }
+			                        
 			}
 		}
 		catch (RecognitionException re) {
@@ -631,8 +637,8 @@ public class csce322hw001pt01Parser extends Parser {
 	}
 
 	public static class GameSymbolContext extends ParserRuleContext {
-		public Token DASH;
 		public Token NUMBER;
+		public Token DASH;
 		public TerminalNode NUMBER() { return getToken(csce322hw001pt01Parser.NUMBER, 0); }
 		public TerminalNode DASH() { return getToken(csce322hw001pt01Parser.DASH, 0); }
 		public GameSymbolContext(ParserRuleContext parent, int invokingState) {
@@ -652,41 +658,27 @@ public class csce322hw001pt01Parser extends Parser {
 	public final GameSymbolContext gameSymbol() throws RecognitionException {
 		GameSymbolContext _localctx = new GameSymbolContext(_ctx, getState());
 		enterRule(_localctx, 18, RULE_gameSymbol);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
-			case 1:
+			setState(94);
+			switch (_input.LA(1)) {
+			case NUMBER:
 				{
-				setState(91);
-				_la = _input.LA(1);
-				if (_la==DASH) {
-					{
-					setState(90);
-					((GameSymbolContext)_localctx).DASH = match(DASH);
-					}
-				}
-
-				setState(93);
+				setState(90);
 				((GameSymbolContext)_localctx).NUMBER = match(NUMBER);
-				 String dashValue = (((GameSymbolContext)_localctx).DASH!=null?((GameSymbolContext)_localctx).DASH.getText():null);
-				                          if((((GameSymbolContext)_localctx).DASH!=null?((GameSymbolContext)_localctx).DASH.getText():null) == null)
-				                          {
-				                            dashValue = "";
-				                          }
-				                          System.out.println( "\t\t\tNumerical Symbol : " + dashValue + (((GameSymbolContext)_localctx).NUMBER!=null?((GameSymbolContext)_localctx).NUMBER.getText():null) ); 
+				 System.out.println( "\t\t\tNumerical Symbol : " + (((GameSymbolContext)_localctx).NUMBER!=null?((GameSymbolContext)_localctx).NUMBER.getText():null) ); 
 				}
 				break;
-			case 2:
+			case DASH:
 				{
-				setState(95);
+				setState(92);
 				((GameSymbolContext)_localctx).DASH = match(DASH);
 				 System.out.println( "\t\t\tOpen Space       : " + (((GameSymbolContext)_localctx).DASH!=null?((GameSymbolContext)_localctx).DASH.getText():null) ); 
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 			}
 		}
@@ -702,30 +694,30 @@ public class csce322hw001pt01Parser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\22f\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\22c\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3"+
 		"\2\3\2\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4"+
 		"\3\4\3\4\3\4\3\4\6\4-\n\4\r\4\16\4.\5\4\61\n\4\3\5\3\5\3\5\6\5\66\n\5"+
 		"\r\5\16\5\67\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\7\6\7D\n\7\r\7\16\7"+
 		"E\3\7\5\7I\n\7\3\b\6\bL\n\b\r\b\16\bM\3\t\6\tQ\n\t\r\t\16\tR\3\t\5\tV"+
-		"\n\t\3\t\3\t\3\n\3\n\3\n\3\13\5\13^\n\13\3\13\3\13\3\13\3\13\5\13d\n\13"+
-		"\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24\2\2e\2\26\3\2\2\2\4\35\3\2\2\2\6#"+
-		"\3\2\2\2\b\62\3\2\2\2\n<\3\2\2\2\fC\3\2\2\2\16K\3\2\2\2\20P\3\2\2\2\22"+
-		"Y\3\2\2\2\24c\3\2\2\2\26\27\b\2\1\2\27\30\5\4\3\2\30\31\5\4\3\2\31\32"+
-		"\5\4\3\2\32\33\b\2\1\2\33\34\7\2\2\3\34\3\3\2\2\2\35\36\7\6\2\2\36\37"+
-		"\b\3\1\2\37 \5\6\4\2 !\7\7\2\2!\"\b\3\1\2\"\5\3\2\2\2#$\7\n\2\2$%\7\3"+
-		"\2\2%&\7\r\2\2&\'\7\4\2\2\'(\b\4\1\2()\7\21\2\2)\60\b\4\1\2*\61\5\b\5"+
-		"\2+-\5\n\6\2,+\3\2\2\2-.\3\2\2\2.,\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60*\3"+
-		"\2\2\2\60,\3\2\2\2\61\7\3\2\2\2\62\63\7\13\2\2\63\65\b\5\1\2\64\66\5\f"+
-		"\7\2\65\64\3\2\2\2\66\67\3\2\2\2\67\65\3\2\2\2\678\3\2\2\289\3\2\2\29"+
-		":\7\f\2\2:;\b\5\1\2;\t\3\2\2\2<=\7\b\2\2=>\b\6\1\2>?\5\16\b\2?@\7\t\2"+
-		"\2@A\b\6\1\2A\13\3\2\2\2BD\5\22\n\2CB\3\2\2\2DE\3\2\2\2EC\3\2\2\2EF\3"+
-		"\2\2\2FH\3\2\2\2GI\7\5\2\2HG\3\2\2\2HI\3\2\2\2I\r\3\2\2\2JL\5\20\t\2K"+
-		"J\3\2\2\2LM\3\2\2\2MK\3\2\2\2MN\3\2\2\2N\17\3\2\2\2OQ\5\24\13\2PO\3\2"+
-		"\2\2QR\3\2\2\2RP\3\2\2\2RS\3\2\2\2SU\3\2\2\2TV\7\20\2\2UT\3\2\2\2UV\3"+
-		"\2\2\2VW\3\2\2\2WX\b\t\1\2X\21\3\2\2\2YZ\7\16\2\2Z[\b\n\1\2[\23\3\2\2"+
-		"\2\\^\7\17\2\2]\\\3\2\2\2]^\3\2\2\2^_\3\2\2\2_`\7\16\2\2`d\b\13\1\2ab"+
-		"\7\17\2\2bd\b\13\1\2c]\3\2\2\2ca\3\2\2\2d\25\3\2\2\2\f.\60\67EHMRU]c";
+		"\n\t\3\t\3\t\3\n\3\n\3\n\3\13\3\13\3\13\3\13\5\13a\n\13\3\13\2\2\f\2\4"+
+		"\6\b\n\f\16\20\22\24\2\2a\2\26\3\2\2\2\4\35\3\2\2\2\6#\3\2\2\2\b\62\3"+
+		"\2\2\2\n<\3\2\2\2\fC\3\2\2\2\16K\3\2\2\2\20P\3\2\2\2\22Y\3\2\2\2\24`\3"+
+		"\2\2\2\26\27\b\2\1\2\27\30\5\4\3\2\30\31\5\4\3\2\31\32\5\4\3\2\32\33\b"+
+		"\2\1\2\33\34\7\2\2\3\34\3\3\2\2\2\35\36\7\5\2\2\36\37\b\3\1\2\37 \5\6"+
+		"\4\2 !\7\6\2\2!\"\b\3\1\2\"\5\3\2\2\2#$\7\t\2\2$%\7\3\2\2%&\7\f\2\2&\'"+
+		"\7\4\2\2\'(\b\4\1\2()\7\21\2\2)\60\b\4\1\2*\61\5\b\5\2+-\5\n\6\2,+\3\2"+
+		"\2\2-.\3\2\2\2.,\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60*\3\2\2\2\60,\3\2\2\2"+
+		"\61\7\3\2\2\2\62\63\7\n\2\2\63\65\b\5\1\2\64\66\5\f\7\2\65\64\3\2\2\2"+
+		"\66\67\3\2\2\2\67\65\3\2\2\2\678\3\2\2\289\3\2\2\29:\7\13\2\2:;\b\5\1"+
+		"\2;\t\3\2\2\2<=\7\7\2\2=>\b\6\1\2>?\5\16\b\2?@\7\b\2\2@A\b\6\1\2A\13\3"+
+		"\2\2\2BD\5\22\n\2CB\3\2\2\2DE\3\2\2\2EC\3\2\2\2EF\3\2\2\2FH\3\2\2\2GI"+
+		"\7\20\2\2HG\3\2\2\2HI\3\2\2\2I\r\3\2\2\2JL\5\20\t\2KJ\3\2\2\2LM\3\2\2"+
+		"\2MK\3\2\2\2MN\3\2\2\2N\17\3\2\2\2OQ\5\24\13\2PO\3\2\2\2QR\3\2\2\2RP\3"+
+		"\2\2\2RS\3\2\2\2SU\3\2\2\2TV\7\17\2\2UT\3\2\2\2UV\3\2\2\2VW\3\2\2\2WX"+
+		"\b\t\1\2X\21\3\2\2\2YZ\7\r\2\2Z[\b\n\1\2[\23\3\2\2\2\\]\7\r\2\2]a\b\13"+
+		"\1\2^_\7\16\2\2_a\b\13\1\2`\\\3\2\2\2`^\3\2\2\2a\25\3\2\2\2\13.\60\67"+
+		"EHMRU`";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

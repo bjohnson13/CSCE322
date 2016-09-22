@@ -34,7 +34,7 @@ game              : GAMEBEGIN
                   ;
 
 listValue         : listSymbol+
-                    '^'?
+                    VALUESEPARATOR?
                   ;
 
 gameBoard         : gameRow+
@@ -42,28 +42,23 @@ gameBoard         : gameRow+
 
 gameRow           : gameSymbol+
                     ENDROW?
-                        { System.out.println( "\t\t\tCease Row        : " + $ENDROW.text ); }
+                        {
+                          if ($ENDROW.text != null)
+                          {
+                            System.out.println( "\t\t\tCease Row        : " + $ENDROW.text );
+                          }
+                        }
                   ;
 
 listSymbol        : NUMBER
                         { System.out.println( "\t\t\tNumerical Symbol : " + $NUMBER.text ); }
                   ;
-gameSymbol        : (DASH? NUMBER
-                        {
-                          String dashValue = $DASH.text;
-                          if($DASH.text == null)
-                          {
-                            dashValue = "";
-                          }
-                          System.out.println( "\t\t\tNumerical Symbol : " + dashValue + $NUMBER.text );
-                        }
+gameSymbol        : (NUMBER
+                        { System.out.println( "\t\t\tNumerical Symbol : " + $NUMBER.text ); }
                     | DASH
                         { System.out.println( "\t\t\tOpen Space       : " + $DASH.text ); }
                     )
                   ;
-
-
-
 
 SECTIONBEGIN      : '%section%' ;
 SECTIONEND        : '$section' ;
@@ -73,8 +68,9 @@ TITLESYMBOL       : '%title%' ;
 LISTBEGIN         : '%' ( 'spaces' | 'values' ) '%' ;
 LISTEND           : '$' ( 'spaces' | 'values' ) ;
 SECTIONNAME       : ( 'Spaces' | 'Values' | 'Game' ) ;
-NUMBER            : ([0-9])+ ;
+NUMBER            : ('-'?[0-9])+ ;
 DASH              : '-' ;
 ENDROW            : '/n' ;
+VALUESEPARATOR    : '^' ;
 ASSIGNVALUE       : '=>' ;
 WS                : [ \t\r\n ]+ -> skip ;
