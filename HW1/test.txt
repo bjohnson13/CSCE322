@@ -10,7 +10,7 @@ $section
     %spaces%
       1^ 15^  5^  7^  2^  12^  8^ 14^  3^ 16^ 11^  4^ 13
     $spaces
-$section!
+$section
 
 %section%
   %title% <Game> =>

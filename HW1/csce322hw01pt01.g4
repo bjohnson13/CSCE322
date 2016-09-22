@@ -19,17 +19,22 @@ title             : TITLESYMBOL '<' SECTIONNAME '>'
                   ;
 
 list              : LISTBEGIN
-                        { System.out.println( "Start List: " + $LISTBEGIN.text ); }
+                        { String listType = "Spaces";
+                          if ($LISTBEGIN.text.contains("values"))
+                          {
+                            listType = "Values";
+                          }
+                          System.out.println( "Start " + listType + ": " + $LISTBEGIN.text ); }
                     listValue+
                     LISTEND
-                        { System.out.println( "Cease List: " + $LISTEND.text ); }
+                        { System.out.println( "Cease " + listType + ": " + $LISTEND.text ); }
                   ;
 
 game              : GAMEBEGIN
-                        { System.out.println( "Start Game: " + $GAMEBEGIN.text ); }
+                        { System.out.println( "Start Values: " + $GAMEBEGIN.text ); }
                     gameBoard
                     GAMEEND
-                        { System.out.println( "Cease Game: " + $GAMEEND.text ); }
+                        { System.out.println( "Cease Values: " + $GAMEEND.text ); }
                   ;
 
 listValue         : listSymbol+
@@ -73,3 +78,10 @@ ENDROW            : '/n' ;
 VALUESEPARATOR    : '^' ;
 ASSIGNVALUE       : '=>' ;
 WS                : [ \r\n ]+ -> skip ;
+
+error             :
+                    {
+                      System.out.println("ERR: " + getText() + " in line " + getLine());
+                      System.exit(0);
+                    }
+                  ;
