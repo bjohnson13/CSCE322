@@ -1,0 +1,34 @@
+%section%
+  %title% <Values> =>
+    %values%
+      4^  3^  4^  2^  3^   4^  3^  2^  2^  1^  2^  3^  2
+    $values
+$section
+
+%section%
+  %title% <Spaces> =>
+    %spaces%
+      1^ 15^  5^  7^  2^  12^  8^ 14^  3^ 16^ 11^  4^ 13
+    $spaces
+$section
+
+%section%
+  %title% <Game> =>
+    %game%
+      - - 4 - /n
+      - 1 3 - /n
+      - - - - /n
+      - - - -
+    $game
+    %game%
+       1 -1 -1  1 /n
+      -1  1 -1  1 /n
+      -1 -1  1  1
+    $game
+    %game%
+      -1  1 -1 /n
+      -1  1 -1 /n
+       1 -1  1 /n
+       1 -1  1
+    $game
+$section
