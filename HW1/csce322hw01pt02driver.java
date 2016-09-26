@@ -1,7 +1,7 @@
 import java.io.IOException;
 import org.antlr.v4.runtime.*;
 
-publics class csce322hw01pt02driver {
+public class csce322hw01pt02driver {
   public static void main(String args[]){
     CharStream input = null;
 
@@ -22,8 +22,8 @@ publics class csce322hw01pt02driver {
     csce322hw01pt02Parser parser = new csce322hw01pt02Parser( tokens );
     lexer.removeErrorListeners();
     parser.removeErrorListeners();
-    lexer.addErrorListener( new csce322hw01pt02error() );
-    parser.addErrorListener( new csce322hw01pt02error() );
+    //lexer.addErrorListener( new csce322hw01pt02error() );
+    //parser.addErrorListener( new csce322hw01pt02error() );
     parser.greaterThanSudoku();
   }
 }

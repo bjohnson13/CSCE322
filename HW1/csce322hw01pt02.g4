@@ -16,70 +16,62 @@ grammar csce322hw01pt02;
 }
 
 greaterThanSudoku : section section section
-                        { System.out.println( "Cease File"); }
+                        {
+                          //System.out.println( "Cease File");
+                          System.out.printf( "You need to fill %.0f spaces...\n", numberOfSpaces );
+                        }
                     EOF;
 
 section           : SECTIONBEGIN
-                        { System.out.println( "Start Section: " + $SECTIONBEGIN.text ); }
                     title
                     SECTIONEND
-                        { System.out.println( "Cease Section: " + $SECTIONEND.text ); }
                   ;
 
-title             : TITLESYMBOL '<' SECTIONNAME '>'
-                        { System.out.println( "Label: " + $TITLESYMBOL.text + '<' + $SECTIONNAME.text + '>' );
-                          if($SECTIONNAME.text.equals("Spaces")) {
+title             : TITLESYMBOL (SECTIONNAMEVALUES | SECTIONNAMESPACES | SECTIONNAMEGAME)
+                        {
+                          String sectionName = $text;
+                          if(sectionName.equals("Spaces")) {
                             hasSpaces++;
                             if(hasSpaces > 1)
                             {
-                              // TODO: Throw Parse Error
-                              System.out.println( "ERROR: Too Many Spaces Sections");
+                              // TODO: Throw Parse Error - ?Rule 1
+                              //System.out.println( "----------------------------ERROR: Too Many Spaces Sections");
                             }
-                          } else if ($SECTIONNAME.text.equals("Values")) {
+                          } else if (sectionName.equals("Values")) {
                             hasValues++;
                             if(hasValues > 1)
                             {
-                              // TODO: Throw Parse Error
-                              System.out.println( "ERROR: Too Many Values Sections");
+                              // TODO: Throw Parse Error - ?Rule 1
+                              //System.out.println( "----------------------------ERROR: Too Many Values Sections");
                             }
-                          } else if ($SECTIONNAME.text.equals("Game")) {
+                          } else if (sectionName.equals("Game")) {
                             hasGame++;
                             if(hasGame > 1)
                             {
-                              // TODO: Throw Parse Error
-                              System.out.println( "ERROR: Too Many Game Sections");
+                              // TODO: Throw Parse Error - ?Rule 1
+                              //System.out.println( "----------------------------ERROR: Too Many Game Sections");
                             }
                           }
                         }
                     ASSIGNVALUE
-                        { System.out.println( "Assign: " + $ASSIGNVALUE.text ); }
                     (list | game+)
                   ;
 
-list              : LISTBEGIN
-                        { String listType = "Spaces";
-                          if ($LISTBEGIN.text.contains("values"))
-                          {
-                            listType = "Values";
-                          }
-                          System.out.println( "Start " + listType + ": " + $LISTBEGIN.text);
-                          numberOfValues = 0;
-                        }
+list              : (VALUESBEGIN | SPACESBEGIN)
+                        {   numberOfValues = 0; }
                     listValue+
-                    LISTEND
-                        { System.out.println( "Cease " + listType + ": " + $LISTEND.text );
+                    (VALUESEND | SPACESEND)
+                        {
                           if(numberOfValues <= 3) {
-                            //TODO: Throw Parse ERROR
-                            System.out.println("ERROR: Not Enought Values in " + listType + " section");
+                            //TODO: Throw Parse ERROR - ?Rule 4
+                            //System.out.println("----------------------------ERROR: Not Enought Values in " + listType + " section");
                           }
                         }
                   ;
 
 game              : GAMEBEGIN
-                        { System.out.println( "Start Values: " + $GAMEBEGIN.text ); }
                     gameBoard
                     GAMEEND
-                        { System.out.println( "Cease Values: " + $GAMEEND.text ); }
                   ;
 
 listValue         : listSymbol+
@@ -90,8 +82,8 @@ gameBoard         : gameRow+
                         {
                           if(numberOfRows <= 2)
                           {
-                            // TODO: Throw Parse Error
-                            System.out.println( "ERROR: Not Enought Rows");
+                            // TODO: Throw Parse Error - ?Rule 2
+                            //System.out.println( "----------------------------ERROR: Not Enought Rows");
                           }
 
                           if(firstGameBoard)
@@ -99,13 +91,13 @@ gameBoard         : gameRow+
                             firstGameBoard = false;
                             if(numberOfRows != numberOfColumns)
                             {
-                              //TODO: Throw Semantic Error
-                              System.out.println("-------------------------Number of Rows do not equal Number of Columns");
+                              //TODO: Throw Semantic Error - Rule 1
+                              //System.out.println("----------------------------Number of Rows do not equal Number of Columns");
                             }
 
                             if(numberOfNumbers > (numberOfSpaces / 4)) {
-                              //TODO: Throw Semantic Error
-                              System.out.println("-------------------------Too Many Numbers, not enough Spaces");
+                              //TODO: Throw Semantic Error - Rule 2
+                              //System.out.println("----------------------------Too Many Numbers, not enough Spaces");
                             }
                           }
                         }
@@ -117,54 +109,46 @@ gameRow           : gameSymbol+
                         {
                           if ($ENDROW.text != null)
                           {
-                            System.out.println( "Cease Row: " + $ENDROW.text );
-
                             if(numberOfColumns <= 2)
                             {
-                              // TODO: Throw Parse Error
-                              System.out.println( "ERROR: Not Enought Columns");
+                              // TODO: Throw Parse Error - ?Rule 3
+                              //System.out.println( "----------------------------ERROR: Not Enought Columns");
                             }
-
                             numberOfColumns = 0;
                           }
                         }
                   ;
 
-listSymbol        : NUMBER
-                        { System.out.println( "Numerical Symbol: " + $NUMBER.text );
-                          numberOfValues++;
-                        }
-                  ;
-gameSymbol        : (NUMBER
-                        { System.out.println( "Numerical Symbol: " + $NUMBER.text );
-                          numberOfNumbers++;
-                        }
-                    | DASH
-                        { System.out.println( "Open Space: " + $DASH.text );
-                          numberOfSpaces++;
-                        }
-                    )
-                    { numberOfColumns++; }
+listSymbol        : NUMBER { numberOfValues++; }
                   ;
 
-SECTIONBEGIN      : '%section%' ;
-SECTIONEND        : '$section' ;
-GAMEBEGIN         : '%game%' ;
-GAMEEND           : '$game' ;
-TITLESYMBOL       : '%title%' ;
-LISTBEGIN         : '%' ( 'spaces' | 'values' ) '%' ;
-LISTEND           : '$' ( 'spaces' | 'values' ) ;
-SECTIONNAME       : ( 'Spaces' | 'Values' | 'Game' ) ;
-NUMBER            : ('-'?[0-9])+ ;
-DASH              : '-' ;
-ENDROW            : '/n' ;
+gameSymbol        : (NUMBER { numberOfNumbers++; }
+                    | DASH  { numberOfSpaces++; }
+                    ) { numberOfColumns++; }
+                  ;
+
+SECTIONBEGIN      : '%section%'  ; //{ System.out.println( "Start Section: " + getText() ); } ;
+SECTIONEND        : '$section'   ; //{ System.out.println( "Cease Section: " + getText() ); } ;
+TITLESYMBOL       : '%title%'    ; //{ System.out.print( "Label: " + getText() ); };
+SECTIONNAMESPACES : '<Spaces>'   ; //{ System.out.println( "<Spaces>" ); } ;
+SECTIONNAMEVALUES : '<Values>'   ; //{ System.out.println( "<Values>" ); } ;
+SECTIONNAMEGAME   : '<Game>'     ; //{ System.out.println( "<Game>" ); } ;
+GAMEBEGIN         : '%game%'     ; //{ System.out.println( "Start Values: " + getText() ); } ;
+GAMEEND           : '$game'      ; //{ System.out.println( "Cease Values: " + getText() ); } ;
+SPACESBEGIN       : '%spaces%'   ; //{ System.out.println( "Start Spaces: " + getText() ); } ;
+SPACESEND         : '$spaces'    ; //{ System.out.println( "Cease Spaces: " + getText() ); } ;
+VALUESBEGIN       : '%values%'   ; //{ System.out.println( "Start Values: " + getText() ); } ;
+VALUESEND         : '$values'    ; //{ System.out.println( "Cease Values: " + getText() ); } ;
+NUMBER            : ('-'?[0-9])+ ; //{ System.out.println( "Numerical Symbol: " + getText() ); } ;
+DASH              : '-'          ; //{ System.out.println( "Open Space: " + getText() ); } ;
+ENDROW            : '/n'         ; //{ System.out.println( "Cease Row: " + getText() ); } ;
+ASSIGNVALUE       : '=>'         ; //{ System.out.println( "Assign: " + getText() ); } ;
 VALUESEPARATOR    : '^' ;
-ASSIGNVALUE       : '=>' ;
 WS                : [ \r\n ]+ -> skip ;
 
-//ERROR             :
-//                    . {
-//                      System.out.println("ERR: " + getText() + " in line " + getLine());
-//                      System.exit(0);
-//                    }
-//                  ;
+ERROR             :
+                    . {
+                      System.out.println("ERR: " + getText() + " in line " + getLine());
+                      System.exit(0);
+                    }
+                  ;
