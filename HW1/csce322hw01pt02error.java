@@ -10,9 +10,16 @@ public class csce322hw01pt02error extends BaseErrorListener {
                           String msg,
                           RecognitionException e)
   {
-    System.out.println("ERR: " + offendingSymbol + " in line " + line);
+    String errorToken = parseToken(msg);
+
+    System.out.println("ERR: " + errorToken + " in line " + line + ".");
     System.exit(0);
   }
 
-  
+  public String parseToken(String msg) {
+    String[] token = msg.split("\\'");
+
+    return token[1];
+  }
+
 }
