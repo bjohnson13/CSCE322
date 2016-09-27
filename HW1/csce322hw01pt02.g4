@@ -82,7 +82,7 @@ listValue         : listSymbol
                     listSymbol+
                   ;
 
-gameBoard         : gameRow gameRow gameRow+
+gameBoard         : gameRow gameRow gameRow*
                         {
                           if(firstGameBoard)
                           {
@@ -100,7 +100,7 @@ gameBoard         : gameRow gameRow gameRow+
                         }
                   ;
 
-gameRow           : gameSymbol gameSymbol gameSymbol+
+gameRow           : gameSymbol gameSymbol gameSymbol*
                       { numberOfRows++; }
                     ENDROW?
                         {
