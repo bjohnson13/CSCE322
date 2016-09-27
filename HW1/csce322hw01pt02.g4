@@ -146,9 +146,9 @@ ASSIGNVALUE       : '=>'         ; //{ System.out.println( "Assign: " + getText(
 VALUESEPARATOR    : '^' ;
 WS                : [ \r\n ]+ -> skip ;
 
-ERROR             :
-                    . {
-                      System.out.println("ERR: " + getText() + " in line " + getLine());
-                      System.exit(0);
-                    }
-                  ;
+//ERROR             :
+//                    . {
+//                      System.out.println("ERR: " + getText() + " in line " + getLine());
+//                      System.exit(0);
+//                    }
+//                  ;
