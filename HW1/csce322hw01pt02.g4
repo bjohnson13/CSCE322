@@ -14,14 +14,16 @@ grammar csce322hw01pt02;
 
   public boolean ruleOne   = false;
   public boolean ruleTwo   = false;
-  public boolean ruleThree = false;
 }
 
 greaterThanSudoku : listSection gameSection
                     EOF
                     {
-                      //System.out.println( "Cease File");
-                      System.out.printf( "You need to fill %.0f spaces.\n", numberOfSpaces );
+                      if(ruleOne | ruleTwo) {
+                        csce322hw01pt02error.semanticError(ruleOne, ruleTwo);
+                      } else {
+                        System.out.printf( "You need to fill %.0f spaces.\n", numberOfSpaces );
+                      }
                     }
                   ;
 
@@ -87,14 +89,11 @@ gameBoard         : gameRow gameRow gameRow+
                             firstGameBoard = false;
                             if(numberOfRows != numberOfColumns)
                             {
-                              //TODO: Throw Semantic Error - Rule 1
-                              //System.out.println("----------------------------Number of Rows do not equal Number of Columns");
                               ruleOne = true;
                             }
 
-                            if(numberOfNumbers > (numberOfSpaces / 4)) {
-                              //TODO: Throw Semantic Error - Rule 2
-                              //System.out.println("----------------------------Too Many Numbers, not enough Spaces");
+                            Double totalSpaces = (double)numberOfRows * (double)numberOfColumns;
+                            if(numberOfNumbers > (totalSpaces * 0.25)) {
                               ruleTwo = true;
                             }
                           }
