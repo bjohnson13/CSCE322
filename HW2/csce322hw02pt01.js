@@ -8,7 +8,7 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
 
     function whatever( space , value ){
 
-      space = 7 // 1-16
+      space = 6 // 1-16
 
       // No Number: 0
       var upNum    = getUpNumber(space)
@@ -16,10 +16,10 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
       var rightNum = getRightNumber(space)
       var leftNum  = getLeftNumber(space)
       // No Symbol: 0
-      //var upSym    = getUpSymbol(space)
-      //var downSym  = getDownSymbol(space)
-      //var rightSym = getRightSymbol(space)
-      //var leftSym  = getLeftSymbol(space)
+      var upSym    = getUpSymbol(space)
+      var downSym  = getDownSymbol(space)
+      var rightSym = getRightSymbol(space)
+      var leftSym  = getLeftSymbol(space)
 
       printMyStuff()
 
@@ -133,15 +133,110 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
       }
 
       function getUpSymbol(space) {
+
+        var row         = -1
+        var col         = -1
+        var upSymbol    = 0
+
+        if (space > 1 && space < 5) {
+          row = space - 2
+          col = 0
+        } else if (space > 5 && space < 9) {
+          row = space - 6
+          col = 1
+        } else if (space > 9 && space < 13) {
+          row = space - 10
+          col = 2
+        } else if (space > 13 && space < 17){
+          row = space - 14
+          col = 3
+        }
+
+        if(space == 1 || space == 5 || space == 9 || space == 13) {
+          upSymbol = 0
+        } else {
+          upSymbol = vertical[row][col]
+        }
+
         return upSymbol
       }
       function getDownSymbol(space) {
+
+        var row        = -1
+        var col        = -1
+        var downSymbol = 0
+
+        if (space < 4) {
+          row = space - 1
+          col = 0
+        } else if (space > 4 && space < 8) {
+          row = space - 5
+          col = 0
+        } else if (space > 8 && space < 12) {
+          row = space - 9
+          col = 0
+        } else if (space > 12 && space < 16){
+          row = space - 13
+          col = 0
+        }
+
+        if(space == 4 || space == 8 || space == 12 || space == 16) {
+          downSymbol = 0
+        } else {
+          downSymbol = vertical[row][col]
+        }
+
         return downSymbol
       }
       function getRightSymbol(space) {
+
+        var row         = -1
+        var col         = -1
+        var rightSymbol = 0
+
+        if (space <= 4) {
+          row = space - 1
+          col = 0
+        } else if (space > 4 && space <= 8) {
+          row = space - 5
+          col = 1
+        } else if (space > 8 && space <= 12) {
+          row = space - 9
+          col = 2
+        }
+
+        if(space >= 13) {
+          rightSymbol = 0
+        } else {
+          rightSymbol = horizontal[row][col]
+        }
+
         return rightSymbol
       }
       function getLeftSymbol(space) {
+
+        var row         = -1
+        var col         = -1
+        var leftSymbol  = 0
+
+        if (space > 4 && space <= 8) {
+          row = space - 5
+          col = 0
+        } else if (space > 8 && space <= 12) {
+          row = space - 9
+          col = 1
+        } else if (space > 12) {
+          row = space - 13
+          col = 2
+        }
+
+        if(space <= 4) {
+          leftSymbol = 0
+        } else {
+          leftSymbol = horizontal[row][col]
+        }
+
+
         return leftSymbol
       }
 
@@ -149,14 +244,15 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
         console.log("Space: " + space)
         //console.log("Value: " + value)
 
-        console.log("upNum: " + upNum);
-        //console.log("upSym: " + upSymbol);
-        console.log("downNum: " + downNum);
-        //console.log("downSym: " + downSymbol);
+        console.log("upNum: "    + upNum);
+        console.log("downNum: "  + downNum);
         console.log("rightNum: " + rightNum);
-        //console.log("rightSym: " + rightSymbol);
-        console.log("leftNum: " + leftNum);
-        //console.log("leftSym: " + leftSymbol);
+        console.log("leftNum: "  + leftNum);
+
+        console.log("upSym: " + upSym);
+        console.log("downSym: " + downSym);
+        console.log("rightSym: " + rightSym);
+        console.log("leftSym: " + leftSym);
 
         console.log("Game")
         helpers.printGame(gameCopy)
@@ -169,34 +265,3 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
 
     return whatever;
 }
-
-/*
-//Get Number above space, get Symbol above space, Zero indexed
-// array[Row][Column]
-if(space != 0 && space != 4 && space != 8 && space != 12) {
-  //Get Symbol Above
-  if(space < 5 && space > 0){
-    row = space - 2
-    col = 0
-  } else if (space < 9 && space > 4) {
-    row = space - 6
-    col = 1
-  } else if (space < 13 && space > 8) {
-    row = space - 10
-    col = 2
-  } else {
-    row = space - 14
-    col = 3
-  }
-  upSymbol = vertical[row][col]
-} else {
-  upNum    = -1
-  upSymbol = 0
-}
-
-var row       = Math.floor(space / 4)
-var col       = (space % 4)
-var upNumber  = gameCopy[row][col]
-
-return upNumber
-*/
