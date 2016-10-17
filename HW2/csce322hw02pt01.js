@@ -8,8 +8,8 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
 
     function whatever( space , value ){
 
-      space = 6 // 1-16
-
+      //space = 3 // 1-16
+      //value = 2
       // No Number: 0
       var upNum    = getUpNumber(space)
       var downNum  = getDownNumber(space)
@@ -21,7 +21,19 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
       var rightSym = getRightSymbol(space)
       var leftSym  = getLeftSymbol(space)
 
-      printMyStuff()
+      var upValid    = compareValues(upNum, upSym, "up")
+      var downValid  = compareValues(downNum, downSym, "down")
+      var rightValid = compareValues(rightNum, rightSym, "right")
+      var leftValid  = compareValues(leftNum, leftSym, "left")
+
+      var row = getGameRow(space)
+      var col = getGameCol(space)
+
+      if(upValid && downValid && rightValid && leftValid){
+        gameCopy[row][col] = value
+      }
+
+      //printMyStuff()
 
 	    return gameCopy;
 
@@ -64,13 +76,13 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           col = 0
         } else if (space > 4 && space < 8) {
           row = space - 4
-          col = 0
+          col = 1
         } else if (space > 8 && space < 12) {
           row = space - 8
-          col = 0
+          col = 2
         } else if (space > 12 && space < 16){
           row = space - 12
-          col = 0
+          col = 3
         }
 
         if(space == 4 || space == 8 || space == 12 || space == 16) {
@@ -158,6 +170,8 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           upSymbol = vertical[row][col]
         }
 
+        upSymbol = convertSymbol(upSymbol)
+
         return upSymbol
       }
       function getDownSymbol(space) {
@@ -171,13 +185,13 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           col = 0
         } else if (space > 4 && space < 8) {
           row = space - 5
-          col = 0
+          col = 1
         } else if (space > 8 && space < 12) {
           row = space - 9
-          col = 0
+          col = 2
         } else if (space > 12 && space < 16){
           row = space - 13
-          col = 0
+          col = 3
         }
 
         if(space == 4 || space == 8 || space == 12 || space == 16) {
@@ -185,6 +199,8 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
         } else {
           downSymbol = vertical[row][col]
         }
+
+        downSymbol = convertSymbol(downSymbol)
 
         return downSymbol
       }
@@ -211,6 +227,8 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           rightSymbol = horizontal[row][col]
         }
 
+        rightSymbol = convertSymbol(rightSymbol)
+
         return rightSymbol
       }
       function getLeftSymbol(space) {
@@ -236,23 +254,126 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           leftSymbol = horizontal[row][col]
         }
 
+        leftSymbol = convertSymbol(leftSymbol)
 
         return leftSymbol
       }
+      function convertSymbol(sym){
+        if(sym == 1){
+          sym = "<"
+        } else {
+          sym = ">"
+        }
 
+        return sym
+      }
+
+      function getGameRow(space){
+        var row = 0
+
+        if(space > 12){
+          row = space - 13
+        } else if (space > 8){
+          row = space - 9
+        } else if (space > 4){
+          row = space - 5
+        } else {
+          row = space - 1
+        }
+
+        return row
+      }
+      function getGameCol(sapce){
+
+        var col = 0
+
+        if(space > 12){
+          col = 3
+        } else if (space > 8){
+          col = 2
+        } else if (space > 4){
+          col = 1
+        } else {
+          col = 0
+        }
+
+        return col
+      }
+
+      function compareValues(num, sym, direction) {
+
+        var validMove = false
+
+        if(direction === "right" || direction === "down"){
+          //value num
+          switch(sym){
+            case "<":
+              if(value < num || num == "-" || num == 0){
+                validMove = true
+              }
+              break;
+            case ">":
+              if(value > num || num == "-" || num == 0){
+                validMove = true
+              }
+              break;
+            default:
+              validMove = false
+          }
+        } else if (direction === "left" || direction === "up"){
+          //num value
+          switch(sym){
+            case "<":
+              if(num < value || num == "-" || num == 0){
+                validMove = true
+              }
+              break;
+            case ">":
+              if(num > value || num == "-" || num == 0){
+                validMove = true
+              }
+              break;
+            default:
+              validMove = false
+          }
+        }
+        return validMove
+      }
+      function checkRow(){
+
+      }
+      function checkCol(){
+
+      }
+      function checkSquare(){
+
+      }
       function printMyStuff() {
         console.log("Space: " + space)
-        //console.log("Value: " + value)
+        console.log("Value: " + value)
+        console.log("");
 
         console.log("upNum: "    + upNum);
         console.log("downNum: "  + downNum);
         console.log("rightNum: " + rightNum);
         console.log("leftNum: "  + leftNum);
+        console.log("");
 
-        console.log("upSym: " + upSym);
-        console.log("downSym: " + downSym);
+        console.log("upSym: "    + upSym);
+        console.log("downSym: "  + downSym);
         console.log("rightSym: " + rightSym);
-        console.log("leftSym: " + leftSym);
+        console.log("leftSym: "  + leftSym);
+        console.log("");
+
+        console.log("Up Valid: "    + upValid);
+        console.log("Down Valid: "  + downValid);
+        console.log("Right Valid: " + rightValid);
+        console.log("Left Valid: "  + leftValid);
+        console.log("");
+
+        console.log("Row: " + row);
+        console.log("Col: " + col);
+        console.log("");
 
         console.log("Game")
         helpers.printGame(gameCopy)
