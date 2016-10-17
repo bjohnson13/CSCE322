@@ -313,12 +313,12 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           //value num
           switch(sym){
             case "<":
-              if(value < num || num == "-" || num == 0){
+              if(value < num || num == "-" || num == 0 || value != 4){
                 validMove = true
               }
               break;
             case ">":
-              if(value > num || num == "-" || num == 0){
+              if(value > num || num == "-" || num == 0 || value != 1){
                 validMove = true
               }
               break;
@@ -329,12 +329,12 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           //num value
           switch(sym){
             case "<":
-              if(num < value || num == "-" || num == 0){
+              if(num < value || num == "-" || num == 0 || value != 1){
                 validMove = true
               }
               break;
             case ">":
-              if(num > value || num == "-" || num == 0){
+              if(num > value || num == "-" || num == 0 || value != 4){
                 validMove = true
               }
               break;
