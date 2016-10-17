@@ -26,10 +26,15 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
       var rightValid = compareValues(rightNum, rightSym, "right")
       var leftValid  = compareValues(leftNum, leftSym, "left")
 
+
       var row = getGameRow(space)
       var col = getGameCol(space)
+      var rowValid   = checkRow(row)
+      var colValid   = checkCol(col)
+      var sqrValid   = checkSqr(col)
+      var spaValid   = checkSpa(row, col)
 
-      if(upValid && downValid && rightValid && leftValid){
+      if(upValid && downValid && rightValid && leftValid && rowValid && colValid && sqrValid && spaValid){
         gameCopy[row][col] = value
       }
 
@@ -339,15 +344,67 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
         }
         return validMove
       }
-      function checkRow(){
+      function checkRow(row){
+        var valid = true
 
-      }
-      function checkCol(){
+        for(i = 0; i < 4; i++){
+          if(value == gameCopy[row][i]){
+            valid = false
+          }
+        }
 
+        return valid
       }
-      function checkSquare(){
+      function checkCol(col){
+        var valid = true
 
+        for(i = 0; i < 4; i++){
+          if(value == gameCopy[i][col]){
+            valid = false
+          }
+        }
+
+        return valid
       }
+      function checkSqr(){
+        var valid = true
+
+        if(space == 1 || space == 2 || space == 5 || space == 6) {
+          if(value == gameCopy[0][0]) { valid = false}
+          if(value == gameCopy[0][1]) { valid = false}
+          if(value == gameCopy[1][0]) { valid = false}
+          if(value == gameCopy[1][1]) { valid = false}
+        }
+        if(space == 3 || space == 4 || space == 7 || space == 8) {
+          if(value == gameCopy[2][0]) { valid = false}
+          if(value == gameCopy[2][1]) { valid = false}
+          if(value == gameCopy[3][0]) { valid = false}
+          if(value == gameCopy[3][1]) { valid = false}
+        }
+        if(space == 9 || space == 10 || space == 13 || space == 14) {
+          if(value == gameCopy[0][2]) { valid = false}
+          if(value == gameCopy[0][3]) { valid = false}
+          if(value == gameCopy[1][2]) { valid = false}
+          if(value == gameCopy[1][3]) { valid = false}
+        }
+        if(space == 11 || space == 12 || space == 15 || space == 16) {
+          if(value == gameCopy[2][2]) { valid = false}
+          if(value == gameCopy[2][3]) { valid = false}
+          if(value == gameCopy[3][2]) { valid = false}
+          if(value == gameCopy[3][3]) { valid = false}
+        }
+        return valid
+      }
+      function checkSpa(row, col){
+        var valid = true
+
+        if(gameCopy[row][col] != "-"){
+          valid = false
+        }
+
+        return valid
+      }
+
       function printMyStuff() {
         console.log("Space: " + space)
         console.log("Value: " + value)
@@ -369,6 +426,10 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
         console.log("Down Valid: "  + downValid);
         console.log("Right Valid: " + rightValid);
         console.log("Left Valid: "  + leftValid);
+        console.log("Row Valid: "   + rowValid);
+        console.log("Col Valid: "   + colValid);
+        console.log("Sqr Valid: "   + sqrValid);
+        console.log("Spa Valid: "   + spaValid);
         console.log("");
 
         console.log("Row: " + row);
