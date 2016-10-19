@@ -313,13 +313,25 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           //value num
           switch(sym){
             case "<":
-              if(value < num || num == "-" || num == 0 || value != 4){
+              if(num == 0 && value == 4){
                 validMove = true
+                break;
+              }else if((value < num || num == "-" || num == 0) && value != 4){
+                validMove = true
+              } else if(value == 4) {
+                validMove = false
               }
               break;
             case ">":
-              if(value > num || num == "-" || num == 0 || value != 1){
+              if(num == 0 && value == 1){
                 validMove = true
+                break;
+              }else if((value > num || num == "-" || num == 0) && value != 1){
+                validMove = true
+                break;
+              } else if(value == 1) {
+                validMove = false
+                break;
               }
               break;
             default:
@@ -329,13 +341,25 @@ function onePlayerOneMove( gameCopy , vertical , horizontal ){
           //num value
           switch(sym){
             case "<":
-              if(num < value || num == "-" || num == 0 || value != 1){
+              if(num == 0 && value == 1){
                 validMove = true
+                break;
+              }else if((num < value || num == "-" || num == 0) && value != 1){
+                validMove = true
+                break;
+              } else {
+                validMove = false
               }
               break;
             case ">":
-              if(num > value || num == "-" || num == 0 || value != 4){
+              if(num == 0 && value == 4){
                 validMove = true
+                break;
+              }else if((num > value || num == "-" || num == 0) && value != 4){
+                validMove = true
+                break;
+              } else if(value == 4) {
+                validMove = false
               }
               break;
             default:
