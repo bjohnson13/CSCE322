@@ -12,4 +12,4 @@ var hBefore = hori.slice( 0 );
 
 var theFunction = part.onePlayerManyMoves( before , vBefore , hBefore );
 var after = theFunction( spaces , values );
-helpers.printGame( after );
+//helpers.printGame( after );
