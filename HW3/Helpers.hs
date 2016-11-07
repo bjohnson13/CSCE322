@@ -29,11 +29,12 @@ oneMove game vertical horizontal space value
 	 gameColIndex = getColIndex space
 	 gameRow      = getRow game gameRowIndex
 	 gameCol      = getCol game gameColIndex
-	 checkValidMove = trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show rowValid ++ "\nCol Valid: " ++ show colValid) and [spaceValid, rowValid, colValid]
+	 gameSqr      = getSqr game space
+	 checkValidMove = trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show rowValid ++ "\nCol Valid: " ++ show colValid ++ "\nSqr Valid: " ++ show sqrValid) and [spaceValid, rowValid, colValid, sqrValid]
 	 spaceValid     = spaceEmpty game space
 	 rowValid       = validRow gameRow value
 	 colValid       = validRow gameCol value
-	 --sqrValid
+	 sqrValid       = trace (gameSqr) validRow gameSqr value
 	 --rightValid
 	 --leftValid
 	 --upValid
@@ -52,7 +53,7 @@ spaceEmpty game space
 	 row = getRowIndex space
 	 col = getColIndex space
 
--- Checks if the Row has the value already in it
+-- Checks if an Array has the value already in it
 validRow :: [Char] -> Int -> Bool
 validRow [] _ = True
 validRow (h:t) value
@@ -82,9 +83,16 @@ getColIndex x
 -- Gets the entire row
 getRow :: [[a]] -> Int -> [a]
 getRow game row = game!!row
+-- Gets the entire Col
 getCol :: [[a]] -> Int -> [a]
-getCol game col = [game!!0!!col,game!!1!!col,game!!2!!col,game!!3!!col]
-
+getCol game col = [game!!0!!col, game!!1!!col, game!!2!!col, game!!3!!col]
+-- Gets the corner sqare the space is located in
+getSqr :: [[a]] -> Int -> [a]
+getSqr game x
+	| x == 1   || x == 2   || x == 5   || x == 6  = [game!!0!!0, game!!0!!1, game!!1!!0, game!!1!!1]
+	| x == 3   || x == 4   || x == 7   || x == 8  = [game!!2!!0, game!!2!!1, game!!3!!0, game!!3!!1]
+	| x == 9   || x == 10  || x == 13  || x == 14 = [game!!0!!2, game!!0!!3, game!!1!!2, game!!1!!3]
+	| x == 11  || x == 12  || x == 15  || x == 16 = [game!!2!!2, game!!2!!3, game!!3!!2, game!!3!!3]
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
