@@ -13,4 +13,5 @@ main = do
 
 -- YOUR CODE SHOULD COME AFTER THIS POINT
 onePlayerOneMove :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> [[Char]]
-onePlayerOneMove ga ve ho sp va = ga
+onePlayerOneMove game vertical horizontal space value = newGame
+  where newGame = oneMove game vertical horizontal space value
