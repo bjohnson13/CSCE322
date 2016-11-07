@@ -25,8 +25,8 @@ oneMove game vertical horizontal space value
  | and [spaceValid] == True = trace ("Valid") game
  | otherwise = trace ("Space Valid: " ++ show spaceValid) game
  where
-	 row = getRow space
-	 col = getCol space
+	 row = getRowIndex space
+	 col = getColIndex space
 	 spaceValid = spaceEmpty game space
 	 --rowValid
 	 --colValid
@@ -43,20 +43,20 @@ spaceEmpty game space
  | get2D game row col == '-' = True
  | otherwise             = False
  where
-	 row = getRow space
-	 col = getCol space
+	 row = getRowIndex space
+	 col = getColIndex space
 
 
 -- Gets the row the space is in
-getRow :: Int -> Int
-getRow x
+getRowIndex :: Int -> Int
+getRowIndex x
   | x == 1 || x == 5 || x == 9  || x == 13 = 0
 	| x == 2 || x == 6 || x == 10 || x == 14 = 1
 	| x == 3 || x == 7 || x == 11 || x == 15 = 2
 	| x == 4 || x == 8 || x == 12 || x == 16 = 3
 -- Gets the column the space is in
-getCol :: Int -> Int
-getCol x
+getColIndex :: Int -> Int
+getColIndex x
 	| x == 1  || x == 2  || x == 3  || x == 4  = 0
 	| x == 5  || x == 6  || x == 7  || x == 8  = 1
   | x == 9  || x == 10 || x == 11 || x == 12 = 2
