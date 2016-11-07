@@ -22,13 +22,14 @@ printGame (ro:ros) = do
 -- trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show False)
 oneMove :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> [[Char]]
 oneMove game vertical horizontal space value
- | and [spaceValid] == True = trace ("Valid") game
- | otherwise = trace ("Space Valid: " ++ show spaceValid) game
+ | checkValidMove == True = trace ("Valid") game
+ | otherwise              = trace ("Invalid") game
  where
-	 row = getRowIndex space
-	 col = getColIndex space
-	 spaceValid = spaceEmpty game space
-	 --rowValid
+	 gameRow = getRowIndex space
+	 gameCol = getColIndex space
+	 checkValidMove = trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show rowValid) and [spaceValid, rowValid]
+	 spaceValid     = spaceEmpty game space
+	 rowValid       = validRow (getRow game gameRow) value
 	 --colValid
 	 --sqrValid
 	 --rightValid
@@ -36,15 +37,30 @@ oneMove game vertical horizontal space value
 	 --upValid
 	 --downValid
 
+--Logic----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
 
-spaceEmpty :: [[Char]] -> Int -> Bool
 -- Checks if the Space is filled in. True - vacant. False - occupied
+spaceEmpty :: [[Char]] -> Int -> Bool
 spaceEmpty game space
  | get2D game row col == '-' = True
- | otherwise             = False
+ | otherwise                 = False
  where
 	 row = getRowIndex space
 	 col = getColIndex space
+
+-- Checks if the Row has the value already in it
+validRow :: [Char] -> Int -> Bool
+validRow [] _ = True
+validRow (h:t) value
+  | h == '-'              = validRow t value
+	| value == digitToInt h = False
+	| otherwise             = validRow t value
+
+--Helpers--------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
 
 
 -- Gets the row the space is in
@@ -61,6 +77,13 @@ getColIndex x
 	| x == 5  || x == 6  || x == 7  || x == 8  = 1
   | x == 9  || x == 10 || x == 11 || x == 12 = 2
   | x == 13 || x == 14 || x == 15 || x == 16 = 3
+-- Gets the entire row
+getRow :: [[a]] -> Int -> [a]
+getRow game row = game!!row
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
 
 -- The following functions are examples from Ryan Patrick
 get2D :: [[a]] -> Int -> Int -> a
