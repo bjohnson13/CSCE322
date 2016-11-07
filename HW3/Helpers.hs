@@ -25,12 +25,14 @@ oneMove game vertical horizontal space value
  | checkValidMove == True = trace ("Valid") game
  | otherwise              = trace ("Invalid") game
  where
-	 gameRow = getRowIndex space
-	 gameCol = getColIndex space
-	 checkValidMove = trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show rowValid) and [spaceValid, rowValid]
+	 gameRowIndex = getRowIndex space
+	 gameColIndex = getColIndex space
+	 gameRow      = getRow game gameRowIndex
+	 gameCol      = getCol game gameColIndex
+	 checkValidMove = trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show rowValid ++ "\nCol Valid: " ++ show colValid) and [spaceValid, rowValid, colValid]
 	 spaceValid     = spaceEmpty game space
-	 rowValid       = validRow (getRow game gameRow) value
-	 --colValid
+	 rowValid       = validRow gameRow value
+	 colValid       = validRow gameCol value
 	 --sqrValid
 	 --rightValid
 	 --leftValid
@@ -80,6 +82,8 @@ getColIndex x
 -- Gets the entire row
 getRow :: [[a]] -> Int -> [a]
 getRow game row = game!!row
+getCol :: [[a]] -> Int -> [a]
+getCol game col = [game!!0!!col,game!!1!!col,game!!2!!col,game!!3!!col]
 
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
