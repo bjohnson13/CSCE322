@@ -1,0 +1,1 @@
+checkGame(Game,Vertical,Horizontal).

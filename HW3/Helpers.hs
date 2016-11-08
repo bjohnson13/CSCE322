@@ -22,7 +22,7 @@ printGame (ro:ros) = do
 -- trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show False)
 oneMove :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> [[Char]]
 oneMove game vertical horizontal space value
- | checkValidMove == True = trace ("Valid") game
+ | checkValidMove == True = trace ("Valid") makeMove game (chr (value + 48)) gameRowIndex gameColIndex
  | otherwise              = trace ("Invalid") game
  where
 	 gameRowIndex = getRowIndex space
@@ -34,7 +34,7 @@ oneMove game vertical horizontal space value
 	 spaceValid     = spaceEmpty game space
 	 rowValid       = validRow gameRow value
 	 colValid       = validRow gameCol value
-	 sqrValid       = trace (gameSqr) validRow gameSqr value
+	 sqrValid       = validRow gameSqr value
 	 --rightValid
 	 --leftValid
 	 --upValid
@@ -43,6 +43,13 @@ oneMove game vertical horizontal space value
 --Logic----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
+
+-- Creates new game board with new value
+makeMove :: [[a]] -> a -> Int -> Int -> [[a]]
+makeMove game value row col =
+  take row game ++
+  [take col (game !! row) ++ [value] ++ drop (col + 1) (game !! row)] ++
+  drop (row + 1) game
 
 -- Checks if the Space is filled in. True - vacant. False - occupied
 spaceEmpty :: [[Char]] -> Int -> Bool
@@ -64,7 +71,6 @@ validRow (h:t) value
 --Helpers--------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
-
 
 -- Gets the row the space is in
 getRowIndex :: Int -> Int
