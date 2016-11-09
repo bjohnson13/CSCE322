@@ -30,7 +30,7 @@ oneMove game vertical horizontal space value
    checkValidMove  = and[spaceValid, directionsValid, rowColSqrValid]
    spaceValid      = spaceEmpty game space
    rowColSqrValid  = trace ("Row Col Sqr") validRowColSquare game value space
-   directionsValid = trace ("Directions") validDirections game vertical horizontal space value
+   directionsValid = trace ("Directions") validVertical game vertical space value
 
 
 --Logic----------------------------------------------------------------------------------------------------------------------
@@ -58,12 +58,15 @@ validRowColSquare game value space = trace ("Row Valid: " ++ show rowValid ++ "\
     gameRowIndex = getRowIndex space
     gameColIndex = getColIndex space
 
-validDirections :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> Bool
-validDirections game vertical horizontal space value = trace ("Up Valid: " ++ show upValid) upValid--trace ("Up Valid: " ++ show upValid) and[upValid]
+validVertical :: [[Char]] -> [[Int]] -> Int -> Int -> Bool
+validVertical game vertical space value = trace ("Up Valid: " ++ show upValid ++ "\nDown Valid: " ++ show downValid) (upValid && downValid)
   where
-    upValid  = trace ("Value: " ++ show value ++ " UpValue: " ++ show upValue ++ " upSymbol: " ++ show upSymbol ) compareUpValues value upValue upSymbol
-    upValue  = getValue game space 0
-    upSymbol = verticalSymbol vertical space 0
+    upValid    = compareUpValues value upValue upSymbol
+    upValue    = getValue game space 0
+    upSymbol   = verticalSymbol vertical space 0
+    downValid  = compareDownValues value downValue downSymbol
+    downValue  = getValue game space 1
+    downSymbol = verticalSymbol vertical space 1
 
 -- Creates new game board with new value
 makeMove :: [[a]] -> a -> Int -> Int -> [[a]]
@@ -87,12 +90,23 @@ validRow (h:t) value
 -----------------------------------------------------------------------------------------------------------------------------
 compareUpValues :: Int -> Char -> Int -> Bool
 compareUpValues _ _ 0   = True  -- On edge of game board
+compareUpValues _ '9' _   = True  -- On edge of game board
 compareUpValues 4 _ (- 1)  = False -- 4 cannot be less than anything
 compareUpValues 1 _ 1   = False -- 1 cannot be greater than anything
 compareUpValues _ '-' _ = True  -- Nothing to compare against
 compareUpValues value upValue symbol -- Compare two values
   | symbol == -1 = value < digitToInt(upValue)
   | otherwise   = value > digitToInt(upValue)
+
+compareDownValues :: Int -> Char -> Int -> Bool
+compareDownValues _ _ 0   = True  -- On edge of game board
+compareDownValues _ '9' _   = True  -- On edge of game board
+compareDownValues 1 _ (- 1)  = False -- 1 cannot be greater than anything
+compareDownValues 4 _ 1   = False -- 4 cannot be less than anything
+compareDownValues _ '-' _ = True  -- Nothing to compare against
+compareDownValues value downValue symbol -- Compare two values
+  | symbol == -1 = value > digitToInt(downValue)
+  | otherwise   = value < digitToInt(downValue)
 
 
 -- Direction: 0-Up 1-Down 2-Right 3-Left
@@ -169,6 +183,7 @@ getValue game space direction
   -- Space 16
   | space == 16 && direction == 0 = game!!2!!3 -- Up
   | space == 16 && direction == 3 = game!!3!!2 -- Left
+  | otherwise                     = '9'
 
 -- Direction 0-Up 1-Down
 verticalSymbol :: [[Int]] -> Int -> Int -> Int
