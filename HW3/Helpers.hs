@@ -21,16 +21,16 @@ printGame (ro:ros) = do
 
 oneMove :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> [[Char]]
 oneMove game vertical horizontal space value
- | checkValidMove == True = trace ("Valid") makeMove game (chr (value + 48)) gameRowIndex gameColIndex
- | otherwise              = trace ("Invalid") game
+ | checkValidMove == True = makeMove game (chr (value + 48)) gameRowIndex gameColIndex
+ | otherwise              = game --trace ("Invalid") game
  where
    gameRowIndex = getRowIndex space
    gameColIndex = getColIndex space
    checkValidMove   = and[spaceValid, rowColSqrValid, verticalsValid, horizontalsValid]
    spaceValid       = spaceEmpty game space
-   rowColSqrValid   = trace ("Row Col Sqr") validRowColSquare game value space
-   verticalsValid   = trace ("Verticals") validVertical game vertical space value
-   horizontalsValid = trace ("Horizontals") validHorizontal game horizontal space value
+   rowColSqrValid   = validRowColSquare game value space
+   verticalsValid   = validVertical game vertical space value
+   horizontalsValid = validHorizontal game horizontal space value
 
 
 --Logic----------------------------------------------------------------------------------------------------------------------
@@ -40,14 +40,14 @@ oneMove game vertical horizontal space value
 -- Checks if the Space is filled in. True - vacant. False - occupied
 spaceEmpty :: [[Char]] -> Int -> Bool
 spaceEmpty game space
- | get2D game row col == '-' = trace ("Space Valid: True") True
- | otherwise                 = trace ("Space Valid: False") False
+ | get2D game row col == '-' = True --trace ("Space Valid: True") True
+ | otherwise                 = True --trace ("Space Valid: False") False
  where
 	 row = getRowIndex space
 	 col = getColIndex space
 
 validRowColSquare :: [[Char]] -> Int -> Int -> Bool
-validRowColSquare game value space = trace ("Row Valid: " ++ show rowValid ++ "\nCol Valid: " ++ show colValid ++ "\nSqr Valid: " ++ show sqrValid) and[rowValid, colValid, sqrValid]
+validRowColSquare game value space = (rowValid && colValid && sqrValid) --trace ("Row Valid: " ++ show rowValid ++ "\nCol Valid: " ++ show colValid ++ "\nSqr Valid: " ++ show sqrValid) (rowValid && colValid && sqrValid)
   where
     rowValid     = validRow gameRow value
     colValid     = validRow gameCol value
@@ -59,24 +59,24 @@ validRowColSquare game value space = trace ("Row Valid: " ++ show rowValid ++ "\
     gameColIndex = getColIndex space
 
 validVertical :: [[Char]] -> [[Int]] -> Int -> Int -> Bool
-validVertical game vertical space value = trace ("Up Valid: " ++ show upValid ++ "\nDown Valid: " ++ show downValid) (upValid && downValid)
+validVertical game vertical space value = (upValid && downValid) --trace ("Up Valid: " ++ show upValid ++ "\nDown Valid: " ++ show downValid) (upValid && downValid)
   where
-    upValid    = compareUpValues value upValue upSymbol
+    upValid    = compareUpValues value upValue upSymbol --trace ("Value: " ++ show value ++ " Up Value: " ++ show upValue ++ " Up Symbol: " ++ show upSymbol) compareUpValues value upValue upSymbol
     upValue    = getValue game space 0
     upSymbol   = verticalSymbol vertical space 0
-    downValid  = trace ("Value: " ++ show value ++ " Down Value: " ++ show downValue ++ " Down Symbol: " ++ show downSymbol) compareDownValues value downValue downSymbol
+    downValid  = compareDownValues value downValue downSymbol --trace ("Value: " ++ show value ++ " Down Value: " ++ show downValue ++ " Down Symbol: " ++ show downSymbol) compareDownValues value downValue downSymbol
     downValue  = getValue game space 1
     downSymbol = verticalSymbol vertical space 1
 
 validHorizontal :: [[Char]] -> [[Int]] -> Int -> Int -> Bool
-validHorizontal game horizontal space value = trace ("Right Valid: " ++ show rightValid ++ "\nLeft Valid: " ++ show leftValid) (rightValid && leftValid)
+validHorizontal game horizontal space value = (rightValid && leftValid) --trace ("Right Valid: " ++ show rightValid ++ "\nLeft Valid: " ++ show leftValid) (rightValid && leftValid)
   where
-    rightValid    = compareRightValues value rightValue rightSymbol
-    rightValue    = getValue game space 2
-    rightSymbol   = horizontalSymbol horizontal space 0
-    leftValid  = compareLeftValues value leftValue leftSymbol
-    leftValue  = getValue game space 3
-    leftSymbol = horizontalSymbol horizontal space 1
+    rightValid  = compareRightValues value rightValue rightSymbol --trace ("Value: " ++ show value ++ " Right Value: " ++ show rightValue ++ " right Symbol: " ++ show rightSymbol) compareRightValues value rightValue rightSymbol
+    rightValue  = getValue game space 2
+    rightSymbol = horizontalSymbol horizontal space 0
+    leftValid   = compareLeftValues value leftValue leftSymbol --trace ("Value: " ++ show value ++ " Left Value: " ++ show leftValue ++ " Left Symbol: " ++ show leftSymbol) compareLeftValues value leftValue leftSymbol
+    leftValue   = getValue game space 3
+    leftSymbol  = horizontalSymbol horizontal space 1
 
 -- Creates new game board with new value
 makeMove :: [[a]] -> a -> Int -> Int -> [[a]]
@@ -99,44 +99,44 @@ validRow (h:t) value
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 compareUpValues :: Int -> Char -> Int -> Bool
-compareUpValues _ _ 0   = True  -- On edge of game board
+compareUpValues _ _ 0     = True  -- On edge of game board
 compareUpValues _ '9' _   = True  -- On edge of game board
-compareUpValues 4 _ (- 1)  = False -- 4 cannot be less than anything
-compareUpValues 1 _ 1   = False -- 1 cannot be greater than anything
-compareUpValues _ '-' _ = True  -- Nothing to compare against
+compareUpValues 4 _ (- 1) = False -- 4 cannot be less than anything
+compareUpValues 1 _ 1     = False -- 1 cannot be greater than anything
+compareUpValues _ '-' _   = True  -- Nothing to compare against
 compareUpValues value upValue symbol -- Compare two values
   | symbol == -1 = value < digitToInt(upValue)
-  | otherwise   = value > digitToInt(upValue)
+  | otherwise    = value > digitToInt(upValue)
 
 compareDownValues :: Int -> Char -> Int -> Bool
-compareDownValues _ _ 0   = True  -- On edge of game board
+compareDownValues _ _ 0     = True  -- On edge of game board
 compareDownValues _ '9' _   = True  -- On edge of game board
-compareDownValues 1 _ (- 1)  = False -- 1 cannot be greater than anything
-compareDownValues 4 _ 1   = False -- 4 cannot be less than anything
-compareDownValues _ '-' _ = True  -- Nothing to compare against
+compareDownValues 1 _ (- 1) = False -- 1 cannot be greater than anything
+compareDownValues 4 _ 1     = False -- 4 cannot be less than anything
+compareDownValues _ '-' _   = True  -- Nothing to compare against
 compareDownValues value downValue symbol -- Compare two values
   | symbol == -1 = value > digitToInt(downValue)
-  | otherwise   = value < digitToInt(downValue)
+  | otherwise    = value < digitToInt(downValue)
 
 compareRightValues :: Int -> Char -> Int -> Bool
-compareRightValues _ _ 0   = True  -- On edge of game board
+compareRightValues _ _ 0     = True  -- On edge of game board
 compareRightValues _ '9' _   = True  -- On edge of game board
-compareRightValues 1 _ (- 1)  = False -- 1 cannot be greate than anything
-compareRightValues 4 _ 1   = False -- 4 cannot be less than anything
-compareRightValues _ '-' _ = True  -- Nothing to compare against
+compareRightValues 4 _ (- 1) = False -- 4 cannot be less than anything
+compareRightValues 1 _ 1     = False -- 1 cannot be greater than anything
+compareRightValues _ '-' _   = True  -- Nothing to compare against
 compareRightValues value rightValue symbol -- Compare two values
-  | symbol == -1 = value > digitToInt(rightValue)
-  | otherwise   = value < digitToInt(rightValue)
+  | symbol == -1 = value < digitToInt(rightValue)
+  | otherwise    = value > digitToInt(rightValue)
 
 compareLeftValues :: Int -> Char -> Int -> Bool
-compareLeftValues _ _ 0   = True  -- On edge of game board
+compareLeftValues _ _ 0     = True  -- On edge of game board
 compareLeftValues _ '9' _   = True  -- On edge of game board
-compareLeftValues 4 _ (- 1)  = False -- 4 cannot be less than anything
-compareLeftValues 1 _ 1   = False -- 1 cannot be greater than anything
-compareLeftValues _ '-' _ = True  -- Nothing to compare against
+compareLeftValues 1 _ (- 1) = False -- 1 cannot be greate than anything
+compareLeftValues 4 _ 1     = False -- 4 cannot be less than anything
+compareLeftValues _ '-' _   = True  -- Nothing to compare against
 compareLeftValues value leftValue symbol -- Compare two values
-  | symbol == -1 = trace (">") value > digitToInt(leftValue)
-  | otherwise   = trace ("<") value < digitToInt(leftValue)
+  | symbol == -1 =  value > digitToInt(leftValue)
+  | otherwise    = value < digitToInt(leftValue)
 
 -- Direction: 0-Up 1-Down 2-Right 3-Left
 getValue :: [[Char]] -> Int -> Int-> Char
