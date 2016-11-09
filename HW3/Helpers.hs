@@ -25,24 +25,43 @@ oneMove game vertical horizontal space value
  | checkValidMove == True = trace ("Valid") makeMove game (chr (value + 48)) gameRowIndex gameColIndex
  | otherwise              = trace ("Invalid") game
  where
-	 gameRowIndex = getRowIndex space
-	 gameColIndex = getColIndex space
-	 gameRow      = getRow game gameRowIndex
-	 gameCol      = getCol game gameColIndex
-	 gameSqr      = getSqr game space
-	 checkValidMove = trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show rowValid ++ "\nCol Valid: " ++ show colValid ++ "\nSqr Valid: " ++ show sqrValid) and [spaceValid, rowValid, colValid, sqrValid]
-	 spaceValid     = spaceEmpty game space
-	 rowValid       = validRow gameRow value
-	 colValid       = validRow gameCol value
-	 sqrValid       = validRow gameSqr value
-	 --rightValid
-	 --leftValid
-	 --upValid
-	 --downValid
+   gameRowIndex = getRowIndex space
+   gameColIndex = getColIndex space
+   checkValidMove  = and[spaceValid, rowColSqrValid, directionsValid]
+   spaceValid      = spaceEmpty game space
+   rowColSqrValid  = validRowColSquare game value space
+   directionsValid = validDirections game vertical horizontal space value
+
 
 --Logic----------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
+
+-- Checks if the Space is filled in. True - vacant. False - occupied
+spaceEmpty :: [[Char]] -> Int -> Bool
+spaceEmpty game space
+ | get2D game row col == '-' = trace ("Space Valid: True") True
+ | otherwise                 = trace ("Space Valid: False") False
+ where
+	 row = getRowIndex space
+	 col = getColIndex space
+
+validRowColSquare :: [[Char]] -> Int -> Int -> Bool
+validRowColSquare game value space = trace ("Row Valid: " ++ show rowValid ++ "\nCol Valid: " ++ show colValid ++ "\nSqr Valid: " ++ show sqrValid) and[rowValid, colValid, sqrValid]
+  where
+    rowValid     = validRow gameRow value
+    colValid     = validRow gameCol value
+    sqrValid     = validRow gameSqr value
+    gameRow      = getRow game gameRowIndex
+    gameCol      = getCol game gameColIndex
+    gameSqr      = getSqr game space
+    gameRowIndex = getRowIndex space
+    gameColIndex = getColIndex space
+
+validDirections :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> Bool
+validDirections game vertical horizontal space value = trace ("Up Valid: " ++ show upValid) upValid--trace ("Up Valid: " ++ show upValid) and[upValid]
+  where
+    upValid = False
 
 -- Creates new game board with new value
 makeMove :: [[a]] -> a -> Int -> Int -> [[a]]
@@ -51,14 +70,7 @@ makeMove game value row col =
   [take col (game !! row) ++ [value] ++ drop (col + 1) (game !! row)] ++
   drop (row + 1) game
 
--- Checks if the Space is filled in. True - vacant. False - occupied
-spaceEmpty :: [[Char]] -> Int -> Bool
-spaceEmpty game space
- | get2D game row col == '-' = True
- | otherwise                 = False
- where
-	 row = getRowIndex space
-	 col = getColIndex space
+
 
 -- Checks if an Array has the value already in it
 validRow :: [Char] -> Int -> Bool
