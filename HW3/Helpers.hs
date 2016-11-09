@@ -61,7 +61,10 @@ validRowColSquare game value space = trace ("Row Valid: " ++ show rowValid ++ "\
 validDirections :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> Bool
 validDirections game vertical horizontal space value = trace ("Up Valid: " ++ show upValid) upValid--trace ("Up Valid: " ++ show upValid) and[upValid]
   where
-    upValid = False
+    upValid  = False --compareValues value upValue upSymbol
+    upValue  = getValue game space 0
+    --upSymbol =
+
 
 -- Creates new game board with new value
 makeMove :: [[a]] -> a -> Int -> Int -> [[a]]
@@ -83,6 +86,89 @@ validRow (h:t) value
 --Helpers--------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
+
+
+compareValues :: Int -> Int -> Int -> Bool
+compareValues leftVal rightVal symbol
+  | symbol == -1 = leftVal > rightVal
+  | otherwise   = leftVal < rightVal
+
+-- Direction: 0-Up 1-Down 2-Right 3-Left
+getValue :: [[Char]] -> Int -> Int-> Char
+getValue game space direction
+  -- Column 0
+  -- Space 1
+  | space == 1 && direction == 1 = game!!1!!0 -- Down
+  | space == 1 && direction == 2 = game!!0!!1 -- Right
+  -- Space 2
+  | space == 2 && direction == 0 = game!!0!!0 -- Up
+  | space == 2 && direction == 1 = game!!2!!0 -- Down
+  | space == 2 && direction == 2 = game!!1!!1 -- Right
+  -- Space 3
+  | space == 3 && direction == 0 = game!!1!!0 -- Up
+  | space == 3 && direction == 1 = game!!2!!1 -- Down
+  | space == 3 && direction == 2 = game!!3!!0 -- Right
+  -- Space 4
+  | space == 4 && direction == 0 = game!!2!!0 -- Up
+  | space == 4 && direction == 2 = game!!3!!1 -- Right
+
+  -- Column 1
+  -- Space 5
+  | space == 5 && direction == 1 = game!!1!!1 -- Down
+  | space == 5 && direction == 2 = game!!0!!2 -- Right
+  | space == 5 && direction == 3 = game!!0!!0 -- Left
+  -- Space 6
+  | space == 6 && direction == 0 = game!!0!!1 -- Up
+  | space == 6 && direction == 1 = game!!2!!1 -- Down
+  | space == 6 && direction == 2 = game!!1!!2 -- Right
+  | space == 6 && direction == 3 = game!!1!!0 -- Left
+  -- Space 7
+  | space == 7 && direction == 0 = game!!1!!1 -- Up
+  | space == 7 && direction == 1 = game!!3!!1 -- Down
+  | space == 7 && direction == 2 = game!!2!!2 -- Right
+  | space == 7 && direction == 3 = game!!2!!0 -- Left
+  -- Space 8
+  | space == 8 && direction == 0 = game!!2!!1 -- Up
+  | space == 8 && direction == 2 = game!!3!!2 -- Right
+  | space == 8 && direction == 3 = game!!3!!0 -- Left
+
+  -- Column 2
+  -- Space 9
+  | space == 9 && direction == 1 = game!!1!!2 -- Down
+  | space == 9 && direction == 2 = game!!0!!3 -- Right
+  | space == 9 && direction == 3 = game!!0!!1 -- Left
+  -- Space 10
+  | space == 10 && direction == 0 = game!!0!!2 -- Up
+  | space == 10 && direction == 1 = game!!2!!2 -- Down
+  | space == 10 && direction == 2 = game!!1!!3 -- Right
+  | space == 10 && direction == 3 = game!!1!!1 -- Left
+  -- Space 11
+  | space == 11 && direction == 0 = game!!1!!2 -- Up
+  | space == 11 && direction == 1 = game!!3!!2 -- Down
+  | space == 11 && direction == 2 = game!!2!!3 -- Right
+  | space == 11 && direction == 3 = game!!2!!1 -- Left
+  -- Space 12
+  | space == 12 && direction == 0 = game!!2!!2 -- Up
+  | space == 12 && direction == 2 = game!!3!!3 -- Right
+  | space == 12 && direction == 3 = game!!3!!1 -- Left
+
+  -- Column 3
+  -- Space 13
+  | space == 13 && direction == 1 = game!!1!!3 -- Down
+  | space == 13 && direction == 3 = game!!0!!2 -- Left
+  -- Space 14
+  | space == 14 && direction == 0 = game!!0!!3 -- Up
+  | space == 14 && direction == 1 = game!!2!!3 -- Down
+  | space == 14 && direction == 3 = game!!1!!2 -- Left
+  -- Space 15
+  | space == 15 && direction == 0 = game!!1!!3 -- Up
+  | space == 15 && direction == 1 = game!!3!!3 -- Down
+  | space == 15 && direction == 3 = game!!2!!2 -- Left
+  -- Space 16
+  | space == 16 && direction == 0 = game!!2!!3 -- Up
+  | space == 16 && direction == 3 = game!!3!!2 -- Left
+
+
 
 -- Gets the row the space is in
 getRowIndex :: Int -> Int
