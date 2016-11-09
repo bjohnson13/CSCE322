@@ -101,9 +101,9 @@ validRow (h:t) value
 compareUpValues :: Int -> Char -> Int -> Bool
 compareUpValues _ _ 0     = True  -- On edge of game board
 compareUpValues _ '9' _   = True  -- On edge of game board
-compareUpValues _ '-' _   = True  -- Nothing to compare against
 compareUpValues 4 _ (- 1) = False -- 4 cannot be less than anything
 compareUpValues 1 _ 1     = False -- 1 cannot be greater than anything
+compareUpValues _ '-' _   = True  -- Nothing to compare against
 compareUpValues value upValue symbol -- Compare two values
   | symbol == -1 = value < digitToInt(upValue)
   | otherwise    = value > digitToInt(upValue)
@@ -111,9 +111,9 @@ compareUpValues value upValue symbol -- Compare two values
 compareDownValues :: Int -> Char -> Int -> Bool
 compareDownValues _ _ 0     = True  -- On edge of game board
 compareDownValues _ '9' _   = True  -- On edge of game board
-compareDownValues _ '-' _   = True  -- Nothing to compare against
 compareDownValues 1 _ (- 1) = False -- 1 cannot be greater than anything
 compareDownValues 4 _ 1     = False -- 4 cannot be less than anything
+compareDownValues _ '-' _   = True  -- Nothing to compare against
 compareDownValues value downValue symbol -- Compare two values
   | symbol == -1 = value > digitToInt(downValue)
   | otherwise    = value < digitToInt(downValue)
@@ -121,9 +121,9 @@ compareDownValues value downValue symbol -- Compare two values
 compareRightValues :: Int -> Char -> Int -> Bool
 compareRightValues _ _ 0     = True  -- On edge of game board
 compareRightValues _ '9' _   = True  -- On edge of game board
+compareRightValues 1 _ (- 1) = False -- 4 cannot be less than anything
+compareRightValues 4 _ 1     = False -- 1 cannot be greater than anything
 compareRightValues _ '-' _   = True  -- Nothing to compare against
-compareRightValues 4 _ (- 1) = False -- 4 cannot be less than anything
-compareRightValues 1 _ 1     = False -- 1 cannot be greater than anything
 compareRightValues value rightValue symbol -- Compare two values
   | symbol == -1 = value > digitToInt(rightValue)
   | otherwise    = value < digitToInt(rightValue)
@@ -131,9 +131,9 @@ compareRightValues value rightValue symbol -- Compare two values
 compareLeftValues :: Int -> Char -> Int -> Bool
 compareLeftValues _ _ 0     = True  -- On edge of game board
 compareLeftValues _ '9' _   = True  -- On edge of game board
-compareLeftValues _ '-' _   = True  -- Nothing to compare against
 compareLeftValues 4 _ (- 1) = False -- 4 cannot be less than anything
 compareLeftValues 1 _ 1     = False -- 4 cannot be greater than anything
+compareLeftValues _ '-' _   = True  -- Nothing to compare against
 compareLeftValues value leftValue symbol -- Compare two values
   | symbol == -1 = digitToInt(leftValue) > value
   | otherwise    = digitToInt(leftValue) < value
