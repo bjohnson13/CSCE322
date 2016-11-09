@@ -74,7 +74,7 @@ validHorizontal game horizontal space value = trace ("Right Valid: " ++ show rig
     rightValid    = compareRightValues value rightValue rightSymbol
     rightValue    = getValue game space 2
     rightSymbol   = horizontalSymbol horizontal space 0
-    leftValid  = compareLeftValues value leftValue leftSymbol
+    leftValid  = trace ("Value: " ++ show value ++ " Left Value: " ++ show leftValue ++ " Left Symbol: " ++ show leftSymbol) compareLeftValues value leftValue leftSymbol
     leftValue  = getValue game space 3
     leftSymbol = horizontalSymbol horizontal space 1
 
@@ -135,8 +135,8 @@ compareLeftValues 4 _ (- 1)  = False -- 4 cannot be less than anything
 compareLeftValues 1 _ 1   = False -- 1 cannot be greater than anything
 compareLeftValues _ '-' _ = True  -- Nothing to compare against
 compareLeftValues value leftValue symbol -- Compare two values
-  | symbol == -1 = trace ("<") value < digitToInt(leftValue)
-  | otherwise   = trace (">") value > digitToInt(leftValue)
+  | symbol == -1 = trace (">") value > digitToInt(leftValue)
+  | otherwise   = trace ("<") value < digitToInt(leftValue)
 
 -- Direction: 0-Up 1-Down 2-Right 3-Left
 getValue :: [[Char]] -> Int -> Int-> Char
