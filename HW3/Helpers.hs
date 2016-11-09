@@ -19,7 +19,6 @@ printGame (ro:ros) = do
  print ro
  printGame ros
 
--- trace ("Space Valid: " ++ show spaceValid ++ "\nRow Valid: " ++ show False)
 oneMove :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> [[Char]]
 oneMove game vertical horizontal space value
  | checkValidMove == True = trace ("Valid") makeMove game (chr (value + 48)) gameRowIndex gameColIndex
@@ -27,10 +26,11 @@ oneMove game vertical horizontal space value
  where
    gameRowIndex = getRowIndex space
    gameColIndex = getColIndex space
-   checkValidMove  = and[spaceValid, directionsValid, rowColSqrValid]
-   spaceValid      = spaceEmpty game space
-   rowColSqrValid  = trace ("Row Col Sqr") validRowColSquare game value space
-   directionsValid = trace ("Directions") validVertical game vertical space value
+   checkValidMove   = and[spaceValid, rowColSqrValid, verticalsValid, horizontalsValid]
+   spaceValid       = spaceEmpty game space
+   rowColSqrValid   = trace ("Row Col Sqr") validRowColSquare game value space
+   verticalsValid   = trace ("Verticals") validVertical game vertical space value
+   horizontalsValid = trace ("Horizontals") validHorizontal game horizontal space value
 
 
 --Logic----------------------------------------------------------------------------------------------------------------------
@@ -67,6 +67,16 @@ validVertical game vertical space value = trace ("Up Valid: " ++ show upValid ++
     downValid  = compareDownValues value downValue downSymbol
     downValue  = getValue game space 1
     downSymbol = verticalSymbol vertical space 1
+
+validHorizontal :: [[Char]] -> [[Int]] -> Int -> Int -> Bool
+validHorizontal game horizontal space value = trace ("Right Valid: " ++ show rightValid ++ "\nLeft Valid: " ++ show leftValid) (rightValid && leftValid)
+  where
+    rightValid    = compareRightValues value rightValue rightSymbol
+    rightValue    = getValue game space 2
+    rightSymbol   = horizontalSymbol horizontal space 0
+    leftValid  = compareLeftValues value leftValue leftSymbol
+    leftValue  = getValue game space 3
+    leftSymbol = horizontalSymbol horizontal space 1
 
 -- Creates new game board with new value
 makeMove :: [[a]] -> a -> Int -> Int -> [[a]]
@@ -108,6 +118,25 @@ compareDownValues value downValue symbol -- Compare two values
   | symbol == -1 = value > digitToInt(downValue)
   | otherwise   = value < digitToInt(downValue)
 
+compareRightValues :: Int -> Char -> Int -> Bool
+compareRightValues _ _ 0   = True  -- On edge of game board
+compareRightValues _ '9' _   = True  -- On edge of game board
+compareRightValues 1 _ (- 1)  = False -- 1 cannot be greate than anything
+compareRightValues 4 _ 1   = False -- 4 cannot be less than anything
+compareRightValues _ '-' _ = True  -- Nothing to compare against
+compareRightValues value rightValue symbol -- Compare two values
+  | symbol == -1 = value < digitToInt(rightValue)
+  | otherwise   = value > digitToInt(rightValue)
+
+compareLeftValues :: Int -> Char -> Int -> Bool
+compareLeftValues _ _ 0   = True  -- On edge of game board
+compareLeftValues _ '9' _   = True  -- On edge of game board
+compareLeftValues 4 _ (- 1)  = False -- 4 cannot be less than anything
+compareLeftValues 1 _ 1   = False -- 1 cannot be greater than anything
+compareLeftValues _ '-' _ = True  -- Nothing to compare against
+compareLeftValues value leftValue symbol -- Compare two values
+  | symbol == -1 = trace ("<") value < digitToInt(leftValue)
+  | otherwise   = trace (">") value > digitToInt(leftValue)
 
 -- Direction: 0-Up 1-Down 2-Right 3-Left
 getValue :: [[Char]] -> Int -> Int-> Char
@@ -216,6 +245,39 @@ verticalSymbol vertical space direction
   | space == 14 && direction == 0 = vertical!!0!!3
   | space == 15 && direction == 0 = vertical!!1!!3
   | space == 16 && direction == 0 = vertical!!2!!3
+  | otherwise                    = 0
+
+-- Direction 0-Right 1-Left
+horizontalSymbol :: [[Int]] -> Int -> Int -> Int
+horizontalSymbol horizontal space direction
+  --Col 0
+  | space == 1 && direction == 0 = horizontal!!0!!0
+  | space == 2 && direction == 0 = horizontal!!1!!0
+  | space == 3 && direction == 0 = horizontal!!2!!0
+  | space == 4 && direction == 0 = horizontal!!3!!0
+  --Col 1
+  | space == 5 && direction == 0 = horizontal!!0!!0
+  | space == 6 && direction == 0 = horizontal!!1!!0
+  | space == 7 && direction == 0 = horizontal!!2!!0
+  | space == 8 && direction == 0 = horizontal!!3!!0
+  | space == 5 && direction == 1 = horizontal!!0!!1
+  | space == 6 && direction == 1 = horizontal!!1!!1
+  | space == 7 && direction == 1 = horizontal!!2!!1
+  | space == 8 && direction == 1 = horizontal!!3!!1
+  --Col 2
+  | space == 9  && direction == 0 = horizontal!!0!!1
+  | space == 10 && direction == 0 = horizontal!!1!!1
+  | space == 11 && direction == 0 = horizontal!!2!!1
+  | space == 12 && direction == 0 = horizontal!!3!!1
+  | space == 9  && direction == 1 = horizontal!!0!!2
+  | space == 10 && direction == 1 = horizontal!!1!!2
+  | space == 11 && direction == 1 = horizontal!!2!!2
+  | space == 12 && direction == 1 = horizontal!!3!!2
+  -- Col 3
+  | space == 13 && direction == 1 = horizontal!!0!!2
+  | space == 14 && direction == 1 = horizontal!!1!!2
+  | space == 15 && direction == 1 = horizontal!!2!!2
+  | space == 16 && direction == 1 = horizontal!!3!!2
   | otherwise                    = 0
 
 -- Gets the row the space is in
