@@ -27,10 +27,10 @@ oneMove game vertical horizontal space value
  where
    gameRowIndex = getRowIndex space
    gameColIndex = getColIndex space
-   checkValidMove  = and[spaceValid, rowColSqrValid, directionsValid]
+   checkValidMove  = and[spaceValid, directionsValid, rowColSqrValid]
    spaceValid      = spaceEmpty game space
-   rowColSqrValid  = validRowColSquare game value space
-   directionsValid = validDirections game vertical horizontal space value
+   rowColSqrValid  = trace ("Row Col Sqr") validRowColSquare game value space
+   directionsValid = trace ("Directions") validDirections game vertical horizontal space value
 
 
 --Logic----------------------------------------------------------------------------------------------------------------------
@@ -61,10 +61,9 @@ validRowColSquare game value space = trace ("Row Valid: " ++ show rowValid ++ "\
 validDirections :: [[Char]] -> [[Int]] -> [[Int]] -> Int -> Int -> Bool
 validDirections game vertical horizontal space value = trace ("Up Valid: " ++ show upValid) upValid--trace ("Up Valid: " ++ show upValid) and[upValid]
   where
-    upValid  = False --compareValues value upValue upSymbol
+    upValid  = trace ("Value: " ++ show value ++ " UpValue: " ++ show upValue ++ " upSymbol: " ++ show upSymbol ) compareUpValues value upValue upSymbol
     upValue  = getValue game space 0
-    --upSymbol =
-
+    upSymbol = verticalSymbol vertical space 0
 
 -- Creates new game board with new value
 makeMove :: [[a]] -> a -> Int -> Int -> [[a]]
@@ -86,12 +85,15 @@ validRow (h:t) value
 --Helpers--------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
+compareUpValues :: Int -> Char -> Int -> Bool
+compareUpValues _ _ 0   = True  -- On edge of game board
+compareUpValues 4 _ (- 1)  = False -- 4 cannot be less than anything
+compareUpValues 1 _ 1   = False -- 1 cannot be greater than anything
+compareUpValues _ '-' _ = True  -- Nothing to compare against
+compareUpValues value upValue symbol -- Compare two values
+  | symbol == -1 = value < digitToInt(upValue)
+  | otherwise   = value > digitToInt(upValue)
 
-
-compareValues :: Int -> Int -> Int -> Bool
-compareValues leftVal rightVal symbol
-  | symbol == -1 = leftVal > rightVal
-  | otherwise   = leftVal < rightVal
 
 -- Direction: 0-Up 1-Down 2-Right 3-Left
 getValue :: [[Char]] -> Int -> Int-> Char
@@ -168,7 +170,38 @@ getValue game space direction
   | space == 16 && direction == 0 = game!!2!!3 -- Up
   | space == 16 && direction == 3 = game!!3!!2 -- Left
 
-
+-- Direction 0-Up 1-Down
+verticalSymbol :: [[Int]] -> Int -> Int -> Int
+verticalSymbol vertical space direction
+  -- Col 0
+  | space == 1 && direction == 1 = vertical!!0!!0
+  | space == 2 && direction == 1 = vertical!!1!!0
+  | space == 3 && direction == 1 = vertical!!2!!0
+  | space == 2 && direction == 0 = vertical!!0!!0
+  | space == 3 && direction == 0 = vertical!!1!!0
+  | space == 4 && direction == 0 = vertical!!2!!0
+  -- Col 1
+  | space == 5 && direction == 1 = vertical!!0!!1
+  | space == 6 && direction == 1 = vertical!!1!!1
+  | space == 7 && direction == 1 = vertical!!2!!1
+  | space == 6 && direction == 0 = vertical!!0!!1
+  | space == 7 && direction == 0 = vertical!!1!!1
+  | space == 8 && direction == 0 = vertical!!2!!1
+  -- Col 2
+  | space == 9  && direction == 1 = vertical!!0!!2
+  | space == 10 && direction == 1 = vertical!!1!!2
+  | space == 11 && direction == 1 = vertical!!2!!2
+  | space == 10 && direction == 0 = vertical!!0!!2
+  | space == 11 && direction == 0 = vertical!!1!!2
+  | space == 12 && direction == 0 = vertical!!2!!2
+  -- Col 3
+  | space == 13 && direction == 1 = vertical!!0!!3
+  | space == 14 && direction == 1 = vertical!!1!!3
+  | space == 15 && direction == 1 = vertical!!2!!3
+  | space == 14 && direction == 0 = vertical!!0!!3
+  | space == 15 && direction == 0 = vertical!!1!!3
+  | space == 16 && direction == 0 = vertical!!2!!3
+  | otherwise                    = 0
 
 -- Gets the row the space is in
 getRowIndex :: Int -> Int
