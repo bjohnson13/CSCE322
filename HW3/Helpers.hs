@@ -64,7 +64,7 @@ validVertical game vertical space value = trace ("Up Valid: " ++ show upValid ++
     upValid    = compareUpValues value upValue upSymbol
     upValue    = getValue game space 0
     upSymbol   = verticalSymbol vertical space 0
-    downValid  = compareDownValues value downValue downSymbol
+    downValid  = trace ("Value: " ++ show value ++ " Down Value: " ++ show downValue ++ " Down Symbol: " ++ show downSymbol) compareDownValues value downValue downSymbol
     downValue  = getValue game space 1
     downSymbol = verticalSymbol vertical space 1
 
@@ -74,7 +74,7 @@ validHorizontal game horizontal space value = trace ("Right Valid: " ++ show rig
     rightValid    = compareRightValues value rightValue rightSymbol
     rightValue    = getValue game space 2
     rightSymbol   = horizontalSymbol horizontal space 0
-    leftValid  = trace ("Value: " ++ show value ++ " Left Value: " ++ show leftValue ++ " Left Symbol: " ++ show leftSymbol) compareLeftValues value leftValue leftSymbol
+    leftValid  = compareLeftValues value leftValue leftSymbol
     leftValue  = getValue game space 3
     leftSymbol = horizontalSymbol horizontal space 1
 
@@ -151,8 +151,8 @@ getValue game space direction
   | space == 2 && direction == 2 = game!!1!!1 -- Right
   -- Space 3
   | space == 3 && direction == 0 = game!!1!!0 -- Up
-  | space == 3 && direction == 1 = game!!2!!1 -- Down
-  | space == 3 && direction == 2 = game!!3!!0 -- Right
+  | space == 3 && direction == 1 = game!!3!!0 -- Down
+  | space == 3 && direction == 2 = game!!2!!1 -- Right
   -- Space 4
   | space == 4 && direction == 0 = game!!2!!0 -- Up
   | space == 4 && direction == 2 = game!!3!!1 -- Right
