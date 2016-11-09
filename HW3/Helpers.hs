@@ -125,8 +125,8 @@ compareRightValues 4 _ (- 1) = False -- 4 cannot be less than anything
 compareRightValues 1 _ 1     = False -- 1 cannot be greater than anything
 compareRightValues _ '-' _   = True  -- Nothing to compare against
 compareRightValues value rightValue symbol -- Compare two values
-  | symbol == -1 = value < digitToInt(rightValue)
-  | otherwise    = value > digitToInt(rightValue)
+  | symbol == -1 = value > digitToInt(rightValue)
+  | otherwise    = value < digitToInt(rightValue)
 
 compareLeftValues :: Int -> Char -> Int -> Bool
 compareLeftValues _ _ 0     = True  -- On edge of game board
@@ -135,8 +135,8 @@ compareLeftValues 1 _ (- 1) = False -- 1 cannot be greate than anything
 compareLeftValues 4 _ 1     = False -- 4 cannot be less than anything
 compareLeftValues _ '-' _   = True  -- Nothing to compare against
 compareLeftValues value leftValue symbol -- Compare two values
-  | symbol == -1 =  value > digitToInt(leftValue)
-  | otherwise    = value < digitToInt(leftValue)
+  | symbol == -1 = digitToInt(leftValue) > value
+  | otherwise    = digitToInt(leftValue) < value
 
 -- Direction: 0-Up 1-Down 2-Right 3-Left
 getValue :: [[Char]] -> Int -> Int-> Char
