@@ -101,9 +101,9 @@ validRow (h:t) value
 compareUpValues :: Int -> Char -> Int -> Bool
 compareUpValues _ _ 0     = True  -- On edge of game board
 compareUpValues _ '9' _   = True  -- On edge of game board
+compareUpValues _ '-' _   = True  -- Nothing to compare against
 compareUpValues 4 _ (- 1) = False -- 4 cannot be less than anything
 compareUpValues 1 _ 1     = False -- 1 cannot be greater than anything
-compareUpValues _ '-' _   = True  -- Nothing to compare against
 compareUpValues value upValue symbol -- Compare two values
   | symbol == -1 = value < digitToInt(upValue)
   | otherwise    = value > digitToInt(upValue)
@@ -111,9 +111,9 @@ compareUpValues value upValue symbol -- Compare two values
 compareDownValues :: Int -> Char -> Int -> Bool
 compareDownValues _ _ 0     = True  -- On edge of game board
 compareDownValues _ '9' _   = True  -- On edge of game board
+compareDownValues _ '-' _   = True  -- Nothing to compare against
 compareDownValues 1 _ (- 1) = False -- 1 cannot be greater than anything
 compareDownValues 4 _ 1     = False -- 4 cannot be less than anything
-compareDownValues _ '-' _   = True  -- Nothing to compare against
 compareDownValues value downValue symbol -- Compare two values
   | symbol == -1 = value > digitToInt(downValue)
   | otherwise    = value < digitToInt(downValue)
@@ -121,9 +121,9 @@ compareDownValues value downValue symbol -- Compare two values
 compareRightValues :: Int -> Char -> Int -> Bool
 compareRightValues _ _ 0     = True  -- On edge of game board
 compareRightValues _ '9' _   = True  -- On edge of game board
+compareRightValues _ '-' _   = True  -- Nothing to compare against
 compareRightValues 4 _ (- 1) = False -- 4 cannot be less than anything
 compareRightValues 1 _ 1     = False -- 1 cannot be greater than anything
-compareRightValues _ '-' _   = True  -- Nothing to compare against
 compareRightValues value rightValue symbol -- Compare two values
   | symbol == -1 = value > digitToInt(rightValue)
   | otherwise    = value < digitToInt(rightValue)
@@ -131,9 +131,9 @@ compareRightValues value rightValue symbol -- Compare two values
 compareLeftValues :: Int -> Char -> Int -> Bool
 compareLeftValues _ _ 0     = True  -- On edge of game board
 compareLeftValues _ '9' _   = True  -- On edge of game board
-compareLeftValues 1 _ (- 1) = False -- 1 cannot be greate than anything
-compareLeftValues 4 _ 1     = False -- 4 cannot be less than anything
 compareLeftValues _ '-' _   = True  -- Nothing to compare against
+compareLeftValues 4 _ (- 1) = False -- 4 cannot be less than anything
+compareLeftValues 1 _ 1     = False -- 4 cannot be greater than anything
 compareLeftValues value leftValue symbol -- Compare two values
   | symbol == -1 = digitToInt(leftValue) > value
   | otherwise    = digitToInt(leftValue) < value
@@ -256,23 +256,23 @@ horizontalSymbol horizontal space direction
   | space == 3 && direction == 0 = horizontal!!2!!0
   | space == 4 && direction == 0 = horizontal!!3!!0
   --Col 1
-  | space == 5 && direction == 0 = horizontal!!0!!0
-  | space == 6 && direction == 0 = horizontal!!1!!0
-  | space == 7 && direction == 0 = horizontal!!2!!0
-  | space == 8 && direction == 0 = horizontal!!3!!0
-  | space == 5 && direction == 1 = horizontal!!0!!1
-  | space == 6 && direction == 1 = horizontal!!1!!1
-  | space == 7 && direction == 1 = horizontal!!2!!1
-  | space == 8 && direction == 1 = horizontal!!3!!1
+  | space == 5 && direction == 0 = horizontal!!0!!1
+  | space == 6 && direction == 0 = horizontal!!1!!1
+  | space == 7 && direction == 0 = horizontal!!2!!1
+  | space == 8 && direction == 0 = horizontal!!3!!1
+  | space == 5 && direction == 1 = horizontal!!0!!0
+  | space == 6 && direction == 1 = horizontal!!1!!0
+  | space == 7 && direction == 1 = horizontal!!2!!0
+  | space == 8 && direction == 1 = horizontal!!3!!0
   --Col 2
-  | space == 9  && direction == 0 = horizontal!!0!!1
-  | space == 10 && direction == 0 = horizontal!!1!!1
-  | space == 11 && direction == 0 = horizontal!!2!!1
-  | space == 12 && direction == 0 = horizontal!!3!!1
-  | space == 9  && direction == 1 = horizontal!!0!!2
-  | space == 10 && direction == 1 = horizontal!!1!!2
-  | space == 11 && direction == 1 = horizontal!!2!!2
-  | space == 12 && direction == 1 = horizontal!!3!!2
+  | space == 9  && direction == 0 = horizontal!!0!!2
+  | space == 10 && direction == 0 = horizontal!!1!!2
+  | space == 11 && direction == 0 = horizontal!!2!!2
+  | space == 12 && direction == 0 = horizontal!!3!!2
+  | space == 9  && direction == 1 = horizontal!!0!!1
+  | space == 10 && direction == 1 = horizontal!!1!!1
+  | space == 11 && direction == 1 = horizontal!!2!!1
+  | space == 12 && direction == 1 = horizontal!!3!!1
   -- Col 3
   | space == 13 && direction == 1 = horizontal!!0!!2
   | space == 14 && direction == 1 = horizontal!!1!!2
