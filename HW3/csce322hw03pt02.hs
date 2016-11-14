@@ -2,6 +2,7 @@ import Prelude
 import System.Environment ( getArgs )
 import Data.List
 import Helpers
+import Debug.Trace
 
 -- The main method that will be used for testing / comgand line access
 main = do
@@ -13,4 +14,7 @@ main = do
 
 -- YOUR CODE SHOULD COME AFTER THIS POINT
 onePlayerManyMoves :: [[Char]] -> [[Int]] -> [[Int]] -> [Int] -> [Int] -> [[Char]]
-onePlayerManyMoves ga ve ho sps vas = ga
+onePlayerManyMoves game _ _ [] [] = game
+onePlayerManyMoves game vertical horizontal (sHead:sTail) (vHead:vTail) = onePlayerManyMoves newGame vertical horizontal sTail vTail
+  where
+    newGame = oneMove game vertical horizontal sHead vHead

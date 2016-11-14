@@ -26,12 +26,13 @@ part03:-
     readGreaterThanSudokuFile('part01test01.gts',_,_,Game,Vertical,Horizontal),
     writeln(game),
     printGame(Game),
-    solveGame(Game,Vertical,Horizontal,SpacesAndValues),
+    solveGame(Game,Horizontal,Vertical,SpacesAndValues),
+    sort(SpacesAndValues,Sorted),
     writeln(sequence),
-    printSequence(SpacesAndValues).
+    printSequence(Sorted).
   
 part04:-
     readGreaterThanSudokuFile('part01test01.gts',_,_,Game,Vertical,Horizontal),
     writeln(game),
     printGame(Game),
-    checkGame(Game,Vertical,Horizontal).
+    checkGame(Game,Horizontal,Vertical).
