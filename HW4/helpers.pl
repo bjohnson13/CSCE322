@@ -46,7 +46,7 @@ drop(N,[_|T],Rest):-
 splitEverything(Everything,Game,Vertical,Horizontal):-
     length(Everything,Total),
     TotalMore is Total + 1,
-    Size is TotalMore / 3,
+    Size is round(TotalMore / 3),
     take(Size,Everything,Game),
     Two is 2 * Size - 1,
     take(Two,Everything,Next),
